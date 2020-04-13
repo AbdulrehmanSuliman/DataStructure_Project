@@ -361,8 +361,6 @@ void Restaurant::SimpleSimulator()
 	bool FIRST_VEGAN=true;
 	while (EventsQueue.peekFront(current_event)!=false)// Not equal elmafrood ya amr #zaki
 	{
-		//char Timestep[10];
-		//itoa(timestep,Timestep,10);
 		if (timestep==0)
 		{pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: 0,  Number of available Normal cooks: 0,  Number of available Vegan cooks: 0");}
 		else
@@ -390,11 +388,14 @@ void Restaurant::SimpleSimulator()
 		else /*if(timestep <= current_event->getEventTime())*/
 		{
 			pGUI->waitForClick();
+	FIRST_NORMAL=true;
+	FIRST_VIP=true;
+	FIRST_VEGAN=true;
 			timestep++;
 		}
 		//pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
 		FillDrawingList();
-		if (VIP_OrdersWaiting.peekFront(gettingserviced)&&FIRST_VIP)
+		if(VIP_OrdersWaiting.peekFront(gettingserviced)&&FIRST_VIP)
 		{
 			VIP_OrdersWaiting.dequeue(gettingserviced);
 			O_waiting_count_VIP--;
@@ -419,31 +420,34 @@ void Restaurant::SimpleSimulator()
 			OrdersInServing.enqueue(gettingserviced);
 		}
 		if (timestep % 5 == 0)
-	{
-		while (OrdersInServing.peekFront(gettingserviced))
+	{	
+		for(int i=0;i<3;i++)
 		{
-			if (gettingserviced->GetType() == TYPE_VIP)
+	
+
+			if(OrdersInServing.peekFront(gettingserviced))
+			{
+				if (gettingserviced->GetType() == TYPE_VIP)
 			{
 				OrdersInServing.dequeue(gettingserviced);
 				gettingserviced->setStatus(DONE);
 				OrdersFinished.enqueue(gettingserviced);
 				finished_orders++;
-				OrdersInServing.peekFront(gettingserviced);
 			}
-			if (gettingserviced->GetType() == TYPE_NRM)
+				else if (gettingserviced->GetType() == TYPE_NRM)
 			{
 				OrdersInServing.dequeue(gettingserviced);
 				gettingserviced->setStatus(DONE);
 				OrdersFinished.enqueue(gettingserviced);
 				finished_orders++;
-				OrdersInServing.peekFront(gettingserviced);
 			}
-			if (gettingserviced->GetType() == TYPE_VGAN)
+				else  if(gettingserviced->GetType()==TYPE_VGAN)
 			{
 				OrdersInServing.dequeue(gettingserviced);
 				gettingserviced->setStatus(DONE);
 				OrdersFinished.enqueue(gettingserviced);
 				finished_orders++;
+			}
 			}
 		}
 		}
