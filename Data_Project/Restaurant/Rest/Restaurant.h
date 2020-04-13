@@ -47,7 +47,7 @@ private:
 	Queue<Cook*>  Normal_AvailableCook; //Normal cooks that are ready to be assigned to orders
 	Queue<Cook*>  Vegan_AvailableCook;  //Vegan cooks that are ready to be assigned to orders
 
-	Queue<Cook*>  BusyCooks;  //All cooks assigned to cooks
+	PriorityQueue<Cook*>  BusyCooks;  //All cooks assigned to cooks
 	Queue<Cook*>  VIPCookAtBreak;  //VIP cooks that are in a break
 	Queue<Cook*>  VeganCookAtBreak;  //Vegan cooks that are in a break
 	Queue<Cook*>  NormalCooksAtBreak;  //Normal cooks that are in a break

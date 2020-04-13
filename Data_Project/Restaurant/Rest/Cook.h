@@ -1,7 +1,7 @@
 #pragma once
 
 #include "..\Defs.h"
-
+#include "Order.h"
 #pragma once
 class Cook
 {
@@ -12,7 +12,7 @@ class Cook
 	//////////////ADDED/////////////////////
 	const int OrdersBeforeBreak;   //Number of orders that he must complete before taking a break  //TO be Const
 	const int BreakDuration;     //The duration of the break  //To be const
-	int OrderAssignedTo;     //If in busycooks queue then which order it is assigned to
+	Order* OrderAssignedTo;     //If in busycooks queue then which order it is assigned to
 	int ServedKamOrder;    //How many orders is served. if = OrdersBeforeBreak then take a break
 	int AtBreakCounter;   //count the timesteps while in atbreakcooks. if = BreakDuration then take a break
 	int AvailabilityTime; //counts the time at which the cook is available
