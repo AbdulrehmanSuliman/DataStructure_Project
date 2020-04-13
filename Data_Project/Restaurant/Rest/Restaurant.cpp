@@ -31,13 +31,15 @@ void Restaurant::RunSimulation()
 	{
 	case MODE_INTR:
 		SimpleSimulator();
+		pGUI->PrintMessage("SImulation ENDED. click to exit.");
+		pGUI->waitForClick();
 		break;
 	case MODE_STEP:
 		break;
 	case MODE_SLNT:
 		break;
-	case MODE_DEMO:
-		Just_A_Demo();
+	/*case MODE_DEMO:
+		Just_A_Demo();*/
 
 	};
 
@@ -369,15 +371,15 @@ void Restaurant::SimpleSimulator()
 		{
 			EventsQueue.dequeue(current_event);
 			//current_event->Execute(this);
-			if (current_event == dynamic_cast<ArrivalEvent*> (current_event))
-			{
-				current_event->Execute(this);
-				arrived_orders++;
-			}
 			if (current_event == dynamic_cast<CancellationEvent*> (current_event))
 			{
 				current_event->Execute(this);
 				canceled_orders++;
+			}
+			if (current_event == dynamic_cast<ArrivalEvent*> (current_event))
+			{
+				current_event->Execute(this);
+				arrived_orders++;
 			}
 			/*if(current_event==dynamic_cast<PromotionEvent*>(current_event))
 			{
@@ -632,7 +634,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 
 void Restaurant::LoadingFunction()
 {
-	ifstream file ("Simulation_1.txt");
+	ifstream file ("Simulation_3.txt");
 	int NumOfCooksVIP,NumOfCooksNormal,NumOfCooksVegan;
 	int SpeedNormal,SpeedVegan,SpeedVIP;
 	int OrderBeforeBreak;
