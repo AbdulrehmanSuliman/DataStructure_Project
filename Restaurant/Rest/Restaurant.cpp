@@ -347,7 +347,6 @@ void Restaurant::FillDrawingList()
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	pGUI->UpdateInterface();
-	Sleep(1000);
 	pGUI->ResetDrawingList(); 
 }
 
@@ -362,9 +361,12 @@ void Restaurant::SimpleSimulator()
 	bool FIRST_VEGAN=true;
 	while (EventsQueue.peekFront(current_event)!=false)// Not equal elmafrood ya amr #zaki
 	{
-		char Timestep[10];
-		itoa(timestep,Timestep,10);
-		pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
+		//char Timestep[10];
+		//itoa(timestep,Timestep,10);
+		if (timestep==0)
+		{pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: 0,  Number of available Normal cooks: 0,  Number of available Vegan cooks: 0");}
+		else
+		{pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));}
 		if (timestep == current_event->getEventTime())
 		{
 			EventsQueue.dequeue(current_event);
@@ -390,7 +392,7 @@ void Restaurant::SimpleSimulator()
 			pGUI->waitForClick();
 			timestep++;
 		}
-		pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
+		//pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
 		FillDrawingList();
 		if (VIP_OrdersWaiting.peekFront(gettingserviced)&&FIRST_VIP)
 		{
@@ -445,7 +447,7 @@ void Restaurant::SimpleSimulator()
 			}
 		}
 		}
-		pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
+		//pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
 		FillDrawingList();
 }
 }
@@ -731,15 +733,15 @@ void Restaurant::CancelOrder(int id)
 		return;
 	}
 	Normal_OrdersWaiting.enqueue(normalord);
-	Normal_OrdersWaiting.dequeue(deleteorder);
+	Normal_OrdersWaiting.peekFront(deleteorder);
 	while(deleteorder->GetID()!=id && deleteorder!=normalord)
 	{
-		Normal_OrdersWaiting.enqueue(deleteorder);
 		Normal_OrdersWaiting.dequeue(deleteorder);
+		Normal_OrdersWaiting.enqueue(deleteorder);
+		Normal_OrdersWaiting.peekFront(deleteorder);
 	}
 	if (deleteorder->GetID()==normalord->GetID())
 	{
-		Normal_OrdersWaiting.enqueue(normalord);
 		return;
 	}
 	delete deleteorder;
