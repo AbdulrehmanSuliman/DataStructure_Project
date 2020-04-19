@@ -1,7 +1,0 @@
-application/cache
-echo application/cache >> .gitignore
-application/cache
-echo application/cache >> .gitignore
-Debug
-Restaurant/Debug
-Restaurant.opensdf
