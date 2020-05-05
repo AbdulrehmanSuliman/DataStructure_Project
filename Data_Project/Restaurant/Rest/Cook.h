@@ -25,5 +25,6 @@ public:
 	void setType(ORD_TYPE) ;
 	void setSpeed(int);
 	int getAvailabilityTime();
+	void SetOrderAssignedTo(Order*);
 
 };

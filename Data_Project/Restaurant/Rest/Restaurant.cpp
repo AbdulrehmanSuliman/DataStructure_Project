@@ -759,3 +759,111 @@ void Restaurant::CancelOrder(int id)
 		Normal_OrdersWaiting.peekFront(deleteorder);
 	}
 }
+
+Order* Restaurant::WaitingOrderVIPdequeue()
+{
+	Order* neworder;
+	Order* check=nullptr;
+	Order* first;
+	VIP_OrdersWaitingPriorityQueue.dequeue(neworder);
+	VIP_OrdersWaiting.peekFront(first);
+	if (first==neworder)
+	{
+		VIP_OrdersWaiting.dequeue(neworder);
+		return neworder;
+	}
+	while(first!=check)
+	{
+		VIP_OrdersWaiting.dequeue(check);
+		VIP_OrdersWaiting.enqueue(check);
+		VIP_OrdersWaiting.peekFront(check);
+		if (check==neworder)
+		{
+			VIP_OrdersWaiting.dequeue(neworder);
+		}
+	}
+	return neworder;
+}
+
+void Restaurant::WaitingOrderVIPenqueue(Order* addorder)
+{
+	if (addorder->GetType()!=TYPE_VIP)
+	{
+		return;
+	}
+	VIP_OrdersWaiting.enqueue(addorder);
+	VIP_OrdersWaitingPriorityQueue.enqueue(addorder,addorder->CalcPriority_VIP_order());
+}
+
+void Restaurant::WaitingOrdersToServed()
+{
+	Cook* CookAvailable;
+	Order* ServingOrder;
+	while (VIP_OrdersWaitingPriorityQueue.peekFront(ServingOrder) && (VIP_AvailableCook.peekFront(CookAvailable) || Normal_AvailableCook.peekFront(CookAvailable) || Vegan_AvailableCook.peekFront(CookAvailable)))
+	{
+		ServingOrder=WaitingOrderVIPdequeue();
+		ServingOrder->setStatus(SRV);
+		OrdersInServing.enqueue(ServingOrder);
+		O_waiting_count_VIP--;
+		if (VIP_AvailableCook.peekFront(CookAvailable))
+		{
+			VIP_AvailableCook.dequeue(CookAvailable);
+			CookAvailable->SetOrderAssignedTo(ServingOrder);
+			BusyCooks.enqueue(CookAvailable,ServingOrder->GetServTime());
+			C_Available_count_VIP--;
+		}
+		else if (Normal_AvailableCook.peekFront(CookAvailable))
+		{
+			Normal_AvailableCook.dequeue(CookAvailable);
+			CookAvailable->SetOrderAssignedTo(ServingOrder);
+			BusyCooks.enqueue(CookAvailable,ServingOrder->GetServTime());
+			C_Available_count_Normal--;
+		}
+		else if (Vegan_AvailableCook.peekFront(CookAvailable))
+		{
+			Vegan_AvailableCook.dequeue(CookAvailable);
+			CookAvailable->SetOrderAssignedTo(ServingOrder);
+			BusyCooks.enqueue(CookAvailable,ServingOrder->GetServTime());
+			C_Available_count_Vegan--;
+		}
+	}
+
+	while (Vegan_OrdersWaiting.peekFront(ServingOrder) && Vegan_AvailableCook.peekFront(CookAvailable))
+	{
+		Vegan_OrdersWaiting.dequeue(ServingOrder);
+		ServingOrder->setStatus(SRV);
+		OrdersInServing.enqueue(ServingOrder);
+		O_waiting_count_Vegan--;
+		Vegan_AvailableCook.dequeue(CookAvailable);
+		CookAvailable->SetOrderAssignedTo(ServingOrder);
+		BusyCooks.enqueue(CookAvailable,ServingOrder->GetServTime());
+		C_Available_count_Vegan--;
+	}
+
+	while (Normal_OrdersWaiting.peekFront(ServingOrder) && ( Normal_AvailableCook.peekFront(CookAvailable) || VIP_AvailableCook.peekFront(CookAvailable) ) )
+	{
+		Normal_OrdersWaiting.dequeue(ServingOrder);
+		ServingOrder->setStatus(SRV);
+		OrdersInServing.enqueue(ServingOrder);
+		O_waiting_count_Normal--;
+		if (Normal_AvailableCook.peekFront(CookAvailable))
+		{
+			Normal_AvailableCook.dequeue(CookAvailable);
+			CookAvailable->SetOrderAssignedTo(ServingOrder);
+			BusyCooks.enqueue(CookAvailable,ServingOrder->GetServTime());
+			C_Available_count_Normal--;
+		}
+		else if (VIP_AvailableCook.peekFront(CookAvailable))
+		{
+			VIP_AvailableCook.dequeue(CookAvailable);
+			CookAvailable->SetOrderAssignedTo(ServingOrder);
+			BusyCooks.enqueue(CookAvailable,ServingOrder->GetServTime());
+			C_Available_count_VIP--;
+		}
+	}
+}
+
+void Restaurant::assignmentfunction()
+{
+	WaitingOrdersToServed();
+}

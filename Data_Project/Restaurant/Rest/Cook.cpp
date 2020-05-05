@@ -40,7 +40,13 @@ void Cook::setSpeed(int s)
 {
 	speed=s;
 }
+
 int Cook::getAvailabilityTime()
 {
 	return AvailabilityTime;
+}
+
+void Cook::SetOrderAssignedTo(Order* ORD)
+{
+	OrderAssignedTo=ORD;
 }

@@ -34,14 +34,14 @@ public:
 	//
 	void SetMoney(double);
 	//ADDED
-	void setMoney(double money);
 	double getMoney();
 	int getArrivalTime();
+	int GetServTime();
 //<<<<<<< HEAD
 	double CalcPriority_VIP_order();
 //=======
 	void setArrivalTime(int);
-//>>>>>>> 35831b7e6c6de3824f287596f88d11f48cd1521e
+	void SetServTime(int);
 };
 
 #endif

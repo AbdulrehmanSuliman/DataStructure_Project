@@ -49,10 +49,6 @@ void Order::SetMoney(double mon)
 	totalMoney=mon;
 }
 
-void Order::setMoney(double money)
-{
-	totalMoney = money;
-}
 double Order::getMoney()
 {
 	return this->totalMoney;
@@ -70,5 +66,14 @@ double Order::CalcPriority_VIP_order()
 void Order::setArrivalTime(int time)
 {
 	ArrTime = time;
-//>>>>>>> 35831b7e6c6de3824f287596f88d11f48cd1521e
+}
+
+void Order::SetServTime(int time)
+{
+	ServTime=time;
+}
+
+int Order::GetServTime()
+{
+	return ServTime;
 }
