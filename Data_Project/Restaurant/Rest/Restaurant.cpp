@@ -634,7 +634,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 
 void Restaurant::LoadingFunction()
 {
-	ifstream file ("Simulation_3.txt");
+	ifstream file ("Simulation_2.txt");
 	int NumOfCooksVIP,NumOfCooksNormal,NumOfCooksVegan;
 	int SpeedNormal,SpeedVegan,SpeedVIP;
 	int OrderBeforeBreak;

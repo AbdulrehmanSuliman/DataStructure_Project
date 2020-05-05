@@ -5,6 +5,7 @@ Cook::Cook(int orderbeforebreak,int breakduration):BreakDuration(breakduration),
 {
 	ServedKamOrder=0;
 	AvailabilityTime = 0;
+	OrderAssignedTo=nullptr;
 }
 
 
