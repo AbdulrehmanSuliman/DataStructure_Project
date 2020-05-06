@@ -780,6 +780,7 @@ Order* Restaurant::WaitingOrderVIPdequeue()
 		if (check==neworder)
 		{
 			VIP_OrdersWaiting.dequeue(neworder);
+			VIP_OrdersWaiting.peekFront(check);
 		}
 	}
 	return neworder;
