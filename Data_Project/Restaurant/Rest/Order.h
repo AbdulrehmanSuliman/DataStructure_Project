@@ -37,6 +37,7 @@ public:
 	double getMoney();
 	int getArrivalTime();
 	int GetServTime();
+	void SetType(ORD_TYPE);
 //<<<<<<< HEAD
 	double CalcPriority_VIP_order();
 //=======

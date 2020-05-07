@@ -77,6 +77,7 @@ public:
 	void AddtoVIP_OrdersWaitingQueue(Order* ord);  //enqueues the order in th VIP waiting queue
 	void AddtoNormal_OrdersWaitingQueue(Order* ord); //enqueues the order in the Normal waiting queue
 	void AddtoVegan_OrdersWaitingQueue(Order* ord); //enqueues the order in the Vegan waiting list
+	void AddtoVIP_OrdersWaitingPriorityQueue(Order* ord);
 	void promotion(int id, double);
 	/// ===================    DEMO-related functions. Should be removed in phases 1&2   ================= 
 	void Just_A_Demo();	//just to show a demo and should be removed in phase1 1 & 2
@@ -91,6 +92,7 @@ public:
 	void WaitingOrdersToServed();
 	Order* WaitingOrderVIPdequeue();  //Removes VIP orders from the waiting and returns removed order
 	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
+
 };
 
 #endif

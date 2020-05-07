@@ -381,10 +381,10 @@ void Restaurant::SimpleSimulator()
 				current_event->Execute(this);
 				arrived_orders++;
 			}
-			/*if(current_event==dynamic_cast<PromotionEvent*>(current_event))
+			if(current_event==dynamic_cast<PromotionEvent*>(current_event))
 			{
 				current_event->Execute(this);
-			}*/
+			}
 			
 		}
 		else /*if(timestep <= current_event->getEventTime())*/
@@ -601,18 +601,32 @@ void Restaurant::AddtoVegan_OrdersWaitingQueue(Order* ord)
 	Vegan_OrdersWaiting.enqueue(ord);
 	O_waiting_count_Vegan++;
 }
+void Restaurant::AddtoVIP_OrdersWaitingPriorityQueue(Order* ord)
+{
+	VIP_OrdersWaitingPriorityQueue.enqueue(ord,ord->CalcPriority_VIP_order());
+}
 
 void Restaurant::promotion(int id, double moneyExtra)
 {
 	Order* OrderToPromote;
 	Order* firstOrder;
+	int firstOrderID;
 	Normal_OrdersWaiting.peekFront(firstOrder);
-	int firstOrderID = firstOrder->GetID();
+	if (!Normal_OrdersWaiting.isEmpty())
+	{
+		firstOrderID = firstOrder->GetID();
+	}
+	else
+	{
+		firstOrderID = -1;
+	}
 	Order* checkPeek = new Order(0, TYPE_NRM, 0);
 	if (firstOrderID == id)
 	{
 		Normal_OrdersWaiting.dequeue(OrderToPromote);
-		VIP_OrdersWaiting.enqueue(OrderToPromote);  //,OrderToPromote->CalcPriority_VIP_order()
+		OrderToPromote->SetType(TYPE_VIP);
+		WaitingOrderVIPenqueue(OrderToPromote);
+		//VIP_OrdersWaiting.enqueue(OrderToPromote);  //,OrderToPromote->CalcPriority_VIP_order()
 		OrderToPromote->SetMoney(OrderToPromote->getMoney() + moneyExtra);
 		Normal_OrdersWaiting.peekFront(firstOrder);
 		firstOrderID = firstOrder->GetID();
@@ -621,20 +635,24 @@ void Restaurant::promotion(int id, double moneyExtra)
 	{
 		if (OrderToPromote->GetID() == id)
 		{
-			VIP_OrdersWaiting.enqueue(OrderToPromote);  //,OrderToPromote->CalcPriority_VIP_order()
+			OrderToPromote->SetType(TYPE_VIP);
+			WaitingOrderVIPenqueue(OrderToPromote);
+			//VIP_OrdersWaiting.enqueue(OrderToPromote);  //,OrderToPromote->CalcPriority_VIP_order()
 			OrderToPromote->SetMoney(OrderToPromote->getMoney() + moneyExtra);
 		}
 		else
 		{
 			Normal_OrdersWaiting.enqueue(OrderToPromote);
+
 		}
 		Normal_OrdersWaiting.peekFront(checkPeek);
 	}
+	delete checkPeek;
 }
 
 void Restaurant::LoadingFunction()
 {
-	ifstream file ("Simulation_2.txt");
+	ifstream file ("Simulation_1.txt");
 	int NumOfCooksVIP,NumOfCooksNormal,NumOfCooksVegan;
 	int SpeedNormal,SpeedVegan,SpeedVIP;
 	int OrderBeforeBreak;
