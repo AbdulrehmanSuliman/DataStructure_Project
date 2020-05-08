@@ -636,18 +636,20 @@ void Restaurant::LoadingFunction()
 {
 	ifstream file ("Simulation_2.txt");
 	int NumOfCooksVIP,NumOfCooksNormal,NumOfCooksVegan;
-	int SpeedNormal,SpeedVegan,SpeedVIP;
+	int SpeedNormalMin,SpeedNormalMax,SpeedVeganMin,SpeedVeganMax,SpeedVIPMin,SpeedVIPMax;
 	int OrderBeforeBreak;
-	int BreakNormal,Breakvegan,BreakVIP;
-	int TimeBeforeProm;
+	int BreakNormalMin,BreakNormalMax,BreakveganMin,BreakveganMax,BreakVIPMin,BreakVIPMax;
+	double InjuryProb,RestPeriodInjured;
+	int TimeBeforeProm,TimeBeforePromVIP;
 	int NumOfEvents;
 
 
 	file>>NumOfCooksNormal>>NumOfCooksVegan>>NumOfCooksVIP;
-	file>>SpeedNormal>>SpeedVegan>>SpeedVIP;
+	file>>SpeedNormalMin>>SpeedNormalMax>>SpeedVeganMin>>SpeedVeganMax>>SpeedVIPMin>>SpeedVIPMax;
 	file>>OrderBeforeBreak;
-	file>>BreakNormal>>Breakvegan>>BreakVIP;
-	file>>TimeBeforeProm;
+	file>>BreakNormalMin>>BreakNormalMax>>BreakveganMin>>BreakveganMax>>BreakVIPMin>>BreakVIPMax;
+	file>>InjuryProb>>RestPeriodInjured;
+	file>>TimeBeforeProm>>TimeBeforePromVIP;
 	file>>NumOfEvents;
 
 
@@ -656,29 +658,30 @@ void Restaurant::LoadingFunction()
 	
 	for(int i=0;i<NumOfCooksVIP;i++)
 	{
-		newcook=new Cook(OrderBeforeBreak,BreakVIP);
-		newcook->setSpeed(SpeedVIP);
+		newcook=new Cook(OrderBeforeBreak, (rand()%(BreakVIPMax-BreakVIPMin + 1) + BreakVIPMin) );
+		newcook->setSpeed(rand()%(SpeedVIPMax-SpeedVIPMin + 1) + SpeedVIPMin);
 		newcook->setType(TYPE_VIP);
 		newcook->setID(i+1);
 		VIP_AvailableCook.enqueue(newcook);
 	}
 	for(int i=0;i<NumOfCooksNormal;i++)
 	{
-		newcook=new Cook(OrderBeforeBreak,BreakNormal);
-		newcook->setSpeed(SpeedNormal);
+		newcook=new Cook(OrderBeforeBreak, (rand()%(BreakNormalMax-BreakNormalMin + 1) + BreakNormalMin) );
+		newcook->setSpeed(rand()%(SpeedNormalMax-SpeedNormalMin + 1) + SpeedNormalMin);
 		newcook->setType(TYPE_NRM);
 		newcook->setID(NumOfCooksVIP+i+1);
 		Normal_AvailableCook.enqueue(newcook);
 	}
 	for(int i=0;i<NumOfCooksVegan;i++)
 	{
-		newcook=new Cook(OrderBeforeBreak,Breakvegan);
-		newcook->setSpeed(SpeedVegan);
+		newcook=new Cook(OrderBeforeBreak, (rand()%(BreakveganMax-BreakveganMin + 1) + BreakveganMin) );
+		newcook->setSpeed(rand()%(SpeedVeganMax-SpeedVeganMin + 1) + SpeedVeganMin);
 		newcook->setType(TYPE_VGAN);
 		newcook->setID(NumOfCooksNormal+NumOfCooksVIP+i+1);
 		Vegan_AvailableCook.enqueue(newcook);
 	}
-
+	InjuryProbability=InjuryProb;
+	VIP_MaxWaitingTime=TimeBeforePromVIP;
 	TimeBeforePromotion=TimeBeforeProm;
 	C_Available_count_VIP = NumOfCooksVIP;
 	C_Available_count_Normal = NumOfCooksNormal;

@@ -4,7 +4,12 @@
 
 
 
-
+enum COOK_STAT
+{
+	SAFE,
+	INJURED,
+	URGENT
+};
 enum ORD_TYPE	//types of orders
 {
 	TYPE_NRM,	//normal order

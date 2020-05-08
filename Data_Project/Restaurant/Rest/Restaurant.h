@@ -31,7 +31,10 @@ private:
 	int arrived_orders;       //Added by zaki
 	int finished_orders;      //Added by zaki
 	int canceled_orders;      //Added by zaki
-	PriorityQueue<Order*>VIP_OrdersWaitingPriorityQueue; //priority Queue to be used in phase 2
+	int VIP_MaxWaitingTime;
+	double InjuryProbability;
+
+	PriorityQueue<Order*> VIP_OrdersWaitingPriorityQueue; //priority Queue to be used in phase 2
 	Queue<Order*> VIP_OrdersWaiting;  //VIP orders in waiting must be assigned to cook if any
 //>>>>>>> 761f61fa9fd4f98dc50d378bbc25128cc5dd3b81
 	Queue<Order*> Normal_OrdersWaiting;   //Normal orders in waiting assigned to vip and normal cooks after vip is served
@@ -48,9 +51,7 @@ private:
 	Queue<Cook*>  Vegan_AvailableCook;  //Vegan cooks that are ready to be assigned to orders
 
 	PriorityQueue<Cook*>  BusyCooks;  //All cooks assigned to cooks
-	Queue<Cook*>  VIPCookAtBreak;  //VIP cooks that are in a break
-	Queue<Cook*>  VeganCookAtBreak;  //Vegan cooks that are in a break
-	Queue<Cook*>  NormalCooksAtBreak;  //Normal cooks that are in a break
+	PriorityQueue<Cook*>  CooksAtBreak;
 	int O_waiting_count_VIP;//gives the count of the waiting VIP orders
 	int O_waiting_count_Normal; //gives the count of the waiting Normal orders
 	int O_waiting_count_Vegan; //gives the count of the waiting Vegan orders
@@ -84,8 +85,8 @@ public:
 
 /// ================================================================================================== 
 
-	void LoadingFunction();
 	void CancelOrder(int id);
+	void LoadingFunction();
 	void SimpleSimulator();
 	void assignmentfunction();
 	void WaitingOrdersToServed();
