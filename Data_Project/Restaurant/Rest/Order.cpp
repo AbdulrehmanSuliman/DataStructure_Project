@@ -77,3 +77,7 @@ int Order::GetServTime()
 {
 	return ServTime;
 }
+void Order::SetType(ORD_TYPE Otype)
+{
+	type = Otype;
+}

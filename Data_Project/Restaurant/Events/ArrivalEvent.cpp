@@ -18,11 +18,11 @@ void ArrivalEvent::Execute(Restaurant* pRest)
 	//This function should create an order and fills its data 
 	// Then adds it to normal, vegan, or VIP order lists that you will create in phase1
 	Order* Ord = new Order(OrderID, OrdType, Size);
-	Ord->setMoney(OrdMoney);
+	Ord->SetMoney(OrdMoney);
 	Ord->setArrivalTime(EventTime);
 	if (OrdType==TYPE_VIP)
 	{
-		pRest->AddtoVIP_OrdersWaitingQueue(Ord);
+		pRest->WaitingOrderVIPenqueue(Ord);
 	}
 	else if(OrdType == TYPE_NRM)
 	{
