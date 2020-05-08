@@ -33,6 +33,7 @@ private:
 	int canceled_orders;      //Added by zaki
 	int VIP_MaxWaitingTime;
 	double InjuryProbability;
+	int CookRestPeriodInjury;
 
 	PriorityQueue<Order*> VIP_OrdersWaitingPriorityQueue; //priority Queue to be used in phase 2
 	Queue<Order*> VIP_OrdersWaiting;  //VIP orders in waiting must be assigned to cook if any

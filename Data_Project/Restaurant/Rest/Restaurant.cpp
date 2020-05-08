@@ -699,6 +699,7 @@ void Restaurant::LoadingFunction()
 		Vegan_AvailableCook.enqueue(newcook);
 	}
 	InjuryProbability=InjuryProb;
+	CookRestPeriodInjury=RestPeriodInjured;
 	VIP_MaxWaitingTime=TimeBeforePromVIP;
 	TimeBeforePromotion=TimeBeforeProm;
 	C_Available_count_VIP = NumOfCooksVIP;
@@ -746,6 +747,8 @@ void Restaurant::LoadingFunction()
 		eventscounter++;
 	}
 }
+
+
 void Restaurant::CancelOrder(int id)
 {
 	Order* deleteorder;
