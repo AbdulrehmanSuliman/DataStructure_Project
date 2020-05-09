@@ -37,7 +37,9 @@ public:
 	double getMoney();
 	int getArrivalTime();
 	int GetServTime();
+	int GetSize() const;
 	void SetType(ORD_TYPE);
+	void SetWaitingTime(int);
 //<<<<<<< HEAD
 	double CalcPriority_VIP_order();
 //=======

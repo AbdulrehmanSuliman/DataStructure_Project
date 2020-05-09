@@ -26,6 +26,11 @@ public:
 	void setType(ORD_TYPE) ;
 	void setSpeed(int);
 	int getAvailabilityTime();
+	int GetSpeed();
+	void SetAvailabilityTime(int);
 	void SetOrderAssignedTo(Order*);
+	void SetCookStatus(COOK_STAT);
+	void SetUrgentBreak(int);
+	int GetBreakDuration();
 
 };
