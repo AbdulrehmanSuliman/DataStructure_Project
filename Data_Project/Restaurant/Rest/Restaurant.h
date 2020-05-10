@@ -52,6 +52,8 @@ private:
 	Queue<Cook*>  Vegan_AvailableCook;  //Vegan cooks that are ready to be assigned to orders
 
 	PriorityQueue<Cook*>  BusyCooks;  //All cooks assigned to cooks
+	
+	Queue<Cook*> CooksAtRest;	//Cooks that are injuried
 	PriorityQueue<Cook*>  CooksAtBreak;
 	int O_waiting_count_VIP;//gives the count of the waiting VIP orders
 	int O_waiting_count_Normal; //gives the count of the waiting Normal orders

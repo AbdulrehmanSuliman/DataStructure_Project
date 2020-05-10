@@ -66,11 +66,6 @@ void Cook::SetCookStatus(COOK_STAT stat)
 	CookStatus=stat;
 }
 
-void Cook::SetUrgentBreak(int Ubreak)
-{
-	UrgentBreakLeft=Ubreak;
-}
-
 int Cook::GetBreakDuration()
 {
 	return BreakDuration;
