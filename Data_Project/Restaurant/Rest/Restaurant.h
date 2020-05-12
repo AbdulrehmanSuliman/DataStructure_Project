@@ -65,6 +65,14 @@ private:
 	void MovingRestToAvailable();
 	void CheckBusyCooks();
 	void SRV_to_Finshed(Order*);
+
+	void CancelOrder(int id);
+
+	void WaitingOrdersToServed();
+	Order* WaitingOrderVIPdequeue();  //Removes VIP orders from the waiting and returns removed order
+	Order* WaitingOrderVIPdequeuePriority();  
+	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
+	void AssigningCookToOrder(Order*,Cook*);
 public:
 
 	Restaurant();
@@ -92,16 +100,9 @@ public:
 
 /// ================================================================================================== 
 
-	void CancelOrder(int id);
 	void LoadingFunction();
 	void SimpleSimulator();
 	void assignmentfunction();
-	void WaitingOrdersToServed();
-	Order* WaitingOrderVIPdequeue();  //Removes VIP orders from the waiting and returns removed order
-	Order* WaitingOrderVIPdequeuePriority();  
-	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
-	void AssigningCookToOrder(Order*,Cook*);
-	
 };
 
 #endif

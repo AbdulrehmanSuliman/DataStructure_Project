@@ -903,7 +903,6 @@ void Restaurant::WaitingOrdersToServed()
 			else if (CooksAtRest.peekFront(CookAvailable))
 			{
 				CooksAtRest.dequeue(CookAvailable);
-				CookAvailable->setSpeed(CookAvailable->GetSpeed()/2);//->check
 				CookAvailable->SetCookStatus(URGENT);//->check
 				ServingTime=(ServingOrder->GetSize() )/CookAvailable->GetSpeed();
 				ServingOrder->SetServTime(ServingTime);
