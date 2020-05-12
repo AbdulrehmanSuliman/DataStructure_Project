@@ -903,7 +903,7 @@ void Restaurant::WaitingOrdersToServed()
 			else if (CooksAtRest.peekFront(CookAvailable))
 			{
 				CooksAtRest.dequeue(CookAvailable);
-				CookAvailable->SetCookStatus(URGENT);//->check
+				CookAvailable->SetCookStatus(URGENT);
 				ServingTime=(ServingOrder->GetSize() )/CookAvailable->GetSpeed();
 				ServingOrder->SetServTime(ServingTime);
 				CookAvailable->SetAvailabilityTime(timestep+ServingTime);
@@ -988,7 +988,7 @@ void Restaurant::MovingBreakToAvailable()
 	{
 		CooksAtBreak.dequeue(In_BreakCook);
 		In_BreakCook->SetAvailabilityTime(NULL);
-		if(In_BreakCook->GetCookstatus()==INJ)
+		if(In_BreakCook->GetCookstatus()==URGENT)
 		{
 			In_BreakCook->setSpeed(In_BreakCook->GetSpeed()*2);
 			In_BreakCook->SetCookStatus(SAFE);
@@ -1073,7 +1073,9 @@ void Restaurant::CheckBusyCooks()
 			{
 				CooksAtRest.enqueue(BusyCook);
 			}
-			else if(BusyCook->GetNo_SER_ORD()==BusyCook->getOrdersBeforeBreak())
+			else
+			{
+			if(BusyCook->GetNo_SER_ORD()==BusyCook->getOrdersBeforeBreak())
 			{
 				BusyCook->SetAvailabilityTime(BusyCook->GetBreakDuration()+timestep);
 				CooksAtBreak.enqueue(BusyCook,-BusyCook->getAvailabilityTime());
@@ -1096,6 +1098,7 @@ void Restaurant::CheckBusyCooks()
 					Vegan_AvailableCook.enqueue(BusyCook);
 					C_Available_count_Vegan++;
 				}
+			}
 			}
 		}
 	
