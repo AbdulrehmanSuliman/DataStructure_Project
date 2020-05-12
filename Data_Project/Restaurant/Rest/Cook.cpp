@@ -6,6 +6,7 @@ Cook::Cook(int orderbeforebreak,int breakduration):BreakDuration(breakduration),
 	ServedKamOrder=0;
 	AvailabilityTime = 0;
 	OrderAssignedTo=nullptr;
+	CookStatus=SAFE;
 }
 
 
@@ -65,8 +66,23 @@ void Cook::SetCookStatus(COOK_STAT stat)
 {
 	CookStatus=stat;
 }
-
+COOK_STAT Cook::GetCookstatus()
+{
+	return CookStatus;
+}
 int Cook::GetBreakDuration()
 {
 	return BreakDuration;
+}
+int Cook::GetNo_SER_ORD()
+{
+	return ServedKamOrder;
+}
+int Cook::getOrdersBeforeBreak()
+{
+	return OrdersBeforeBreak;
+}
+Order* Cook::GetOrderAssignedTo()
+{
+	return OrderAssignedTo;
 }

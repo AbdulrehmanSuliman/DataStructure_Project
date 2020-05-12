@@ -903,8 +903,8 @@ void Restaurant::WaitingOrdersToServed()
 			else if (CooksAtRest.peekFront(CookAvailable))
 			{
 				CooksAtRest.dequeue(CookAvailable);
-				CookAvailable->setSpeed(CookAvailable->GetSpeed()/2);
-				CookAvailable->SetCookStatus(URGENT);
+				CookAvailable->setSpeed(CookAvailable->GetSpeed()/2);//->check
+				CookAvailable->SetCookStatus(URGENT);//->check
 				ServingTime=(ServingOrder->GetSize() )/CookAvailable->GetSpeed();
 				ServingOrder->SetServTime(ServingTime);
 				CookAvailable->SetAvailabilityTime(timestep+ServingTime);
@@ -982,8 +982,147 @@ void Restaurant::WaitingOrdersToServed()
 	}
 
 }
+void Restaurant::MovingBreakToAvailable()
+{
+	Cook* In_BreakCook;
+	while(CooksAtBreak.peekFront(In_BreakCook)&&In_BreakCook->getAvailabilityTime()==timestep)
+	{
+		CooksAtBreak.dequeue(In_BreakCook);
+		In_BreakCook->SetAvailabilityTime(NULL);
+		if(In_BreakCook->GetCookstatus()==INJ)
+		{
+			In_BreakCook->setSpeed(In_BreakCook->GetSpeed()*2);
+			In_BreakCook->SetCookStatus(SAFE);
 
+		}
+		if(In_BreakCook->GetType()==TYPE_VIP)
+		{
+			VIP_AvailableCook.enqueue(In_BreakCook);
+			C_Available_count_VIP++;
+
+		}
+		else if(In_BreakCook->GetType()==TYPE_NRM)
+		{
+			Normal_AvailableCook.enqueue(In_BreakCook);
+			C_Available_count_Normal++;
+		}
+		else
+		{
+			Vegan_AvailableCook.enqueue(In_BreakCook);
+			C_Available_count_Vegan++;
+		}
+		if(CooksAtBreak.peekFront(In_BreakCook))
+			CooksAtBreak.peekFront(In_BreakCook);
+	}
+}
+void Restaurant::MovingRestToAvailable()
+{
+	Cook* In_RestCook;
+	while(CooksAtRest.peekFront(In_RestCook)&&In_RestCook->getAvailabilityTime()==timestep)
+	{
+		CooksAtRest.dequeue(In_RestCook);
+		In_RestCook->SetAvailabilityTime(NULL);
+		if(In_RestCook->GetCookstatus()==INJ)
+		{
+			In_RestCook->setSpeed(In_RestCook->GetSpeed()*2);
+			In_RestCook->SetCookStatus(SAFE);
+
+		}
+		if(In_RestCook->GetType()==TYPE_VIP)
+		{
+			VIP_AvailableCook.enqueue(In_RestCook);
+			C_Available_count_VIP++;
+
+		}
+		else if(In_RestCook->GetType()==TYPE_NRM)
+		{
+			Normal_AvailableCook.enqueue(In_RestCook);
+			C_Available_count_Normal++;
+		}
+		else
+		{
+			Vegan_AvailableCook.enqueue(In_RestCook);
+			C_Available_count_Vegan++;
+		}
+		if(CooksAtRest.peekFront(In_RestCook))
+		CooksAtRest.peekFront(In_RestCook);
+	}
+}
+void Restaurant::CheckBusyCooks()
+{
+	srand(time(NULL));
+	Cook*BusyCook;
+	int R;
+	R=rand()+1;
+	BusyCooks.peekFront(BusyCook);
+	if(R<=InjuryProbability)
+	{
+		BusyCook->setSpeed(BusyCook->GetSpeed()/2);
+		BusyCook->SetCookStatus(INJ);
+		int remainaingTimetoCompelete=BusyCook->getAvailabilityTime()-timestep;
+		BusyCooks.dequeue(BusyCook);
+		BusyCook->SetAvailabilityTime((remainaingTimetoCompelete*2+timestep));
+		BusyCooks.enqueue(BusyCook,BusyCook->getAvailabilityTime());
+	}
+		while(BusyCooks.peekFront(BusyCook)&&BusyCook->getAvailabilityTime()==timestep)
+		{
+			BusyCooks.dequeue(BusyCook);
+			finished_orders++;
+			SRV_to_Finshed(BusyCook->GetOrderAssignedTo());//remove From Served to finished
+			BusyCook->SetOrderAssignedTo(nullptr);
+			if(BusyCook->GetNo_SER_ORD()==BusyCook->getOrdersBeforeBreak())
+			{
+				BusyCook->SetAvailabilityTime(BusyCook->GetBreakDuration()+timestep);
+				CooksAtBreak.enqueue(BusyCook,-BusyCook->getAvailabilityTime());
+			}
+			else
+			{
+				BusyCook->SetAvailabilityTime(NULL);
+				if(BusyCook->GetType()==TYPE_VIP)
+				{
+					VIP_AvailableCook.enqueue(BusyCook);
+					C_Available_count_VIP++;
+				}
+				else if(BusyCook->GetType()==TYPE_NRM)
+				{
+					Normal_AvailableCook.enqueue(BusyCook);
+					C_Available_count_Normal++;
+				}
+				else
+				{
+					Vegan_AvailableCook.enqueue(BusyCook);
+					C_Available_count_Vegan++;
+				}
+			}
+		}
+	
+}
 void Restaurant::assignmentfunction()
 {
+	MovingBreakToAvailable();
+	MovingRestToAvailable();
+	CheckBusyCooks();
 	WaitingOrdersToServed();
+}
+void Restaurant::SRV_to_Finshed(Order*finished)
+{
+	int ID=finished->GetID();
+	Queue<Order*> temp;
+	Order*tempOrd;
+	while(OrdersInServing.dequeue(tempOrd))
+	{
+		if(tempOrd->GetID()==ID)
+		{
+			tempOrd->setStatus(DONE);
+			OrdersFinished.enqueue(tempOrd);
+		}
+		else
+		{
+			temp.enqueue(tempOrd);
+		}
+	}
+	while(temp.dequeue(tempOrd))
+	{
+		OrdersInServing.enqueue(tempOrd);
+	}
 }

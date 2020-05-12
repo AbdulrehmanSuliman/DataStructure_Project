@@ -7,7 +7,8 @@
 enum COOK_STAT
 {
 	SAFE,
-	URGENT
+	INJ,
+	URGENT//->Check
 };
 enum ORD_TYPE	//types of orders
 {

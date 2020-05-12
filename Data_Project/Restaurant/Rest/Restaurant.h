@@ -61,6 +61,10 @@ private:
 	int C_Available_count_VIP; //gives the count of the available VIP cooks
 	int C_Available_count_Normal; //gives the count of the available Normal cooks
 	int C_Available_count_Vegan; //gives the count of the available Vegan cooks
+	void MovingBreakToAvailable();
+	void MovingRestToAvailable();
+	void CheckBusyCooks();
+	void SRV_to_Finshed(Order*);
 public:
 
 	Restaurant();
@@ -97,7 +101,7 @@ public:
 	Order* WaitingOrderVIPdequeuePriority();  
 	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
 	void AssigningCookToOrder(Order*,Cook*);
-
+	
 };
 
 #endif

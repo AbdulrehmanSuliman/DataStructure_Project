@@ -28,7 +28,10 @@ public:
 	int GetSpeed();
 	void SetAvailabilityTime(int);
 	void SetOrderAssignedTo(Order*);
+	Order*GetOrderAssignedTo();
 	void SetCookStatus(COOK_STAT);
+	COOK_STAT GetCookstatus();
 	int GetBreakDuration();
-
+	int GetNo_SER_ORD();
+	int getOrdersBeforeBreak();
 };
