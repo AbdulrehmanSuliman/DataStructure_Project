@@ -2,8 +2,8 @@ application/cache
 echo application/cache >> .gitignore
 application/cache
 echo application/cache >> .gitignore
-CMP102_Porj_code_Spring2020/Restaurant/Debug
-CMP102_Porj_code_Spring2020/Restaurant/Debug
-CMP102_Porj_code_Spring2020/Restaurant.opensdf
-CMP102_Porj_code_Spring2020/Debug
-CMP102_Porj_code_Spring2020/Debug
+Data_Project/Restaurant/Debug
+Data_Project/Restaurant/Debug
+Data_Project/Restaurant.opensdf
+Data_Project/Debug
+Data_Project/Debug

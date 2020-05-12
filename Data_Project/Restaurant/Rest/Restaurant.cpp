@@ -1062,7 +1062,7 @@ void Restaurant::CheckBusyCooks()
 		int remainaingTimetoCompelete=BusyCook->getAvailabilityTime()-timestep;
 		BusyCooks.dequeue(BusyCook);
 		BusyCook->SetAvailabilityTime((remainaingTimetoCompelete*2+timestep));
-		BusyCooks.enqueue(BusyCook,BusyCook->getAvailabilityTime());
+		BusyCooks.enqueue(BusyCook,-BusyCook->getAvailabilityTime());
 	}
 		while(BusyCooks.peekFront(BusyCook)&&BusyCook->getAvailabilityTime()==timestep)
 		{
@@ -1070,7 +1070,11 @@ void Restaurant::CheckBusyCooks()
 			finished_orders++;
 			SRV_to_Finshed(BusyCook->GetOrderAssignedTo());//remove From Served to finished
 			BusyCook->SetOrderAssignedTo(nullptr);
-			if(BusyCook->GetNo_SER_ORD()==BusyCook->getOrdersBeforeBreak())
+			if(BusyCook->GetCookstatus()==INJ)
+			{
+				CooksAtRest.enqueue(BusyCook);
+			}
+			else if(BusyCook->GetNo_SER_ORD()==BusyCook->getOrdersBeforeBreak())
 			{
 				BusyCook->SetAvailabilityTime(BusyCook->GetBreakDuration()+timestep);
 				CooksAtBreak.enqueue(BusyCook,-BusyCook->getAvailabilityTime());
