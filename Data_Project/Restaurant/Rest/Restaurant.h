@@ -31,7 +31,7 @@ private:
 	int arrived_orders;       //Added by zaki
 	int finished_orders;      //Added by zaki
 	int canceled_orders;      //Added by zaki
-	int VIP_MaxWaitingTime;
+	int VIP_MaxWaitingTime;		//Max time spent in the vip queue
 	double InjuryProbability;
 	int CookRestPeriodInjury;
 
@@ -52,6 +52,8 @@ private:
 	Queue<Cook*>  Vegan_AvailableCook;  //Vegan cooks that are ready to be assigned to orders
 
 	PriorityQueue<Cook*>  BusyCooks;  //All cooks assigned to cooks
+	
+	Queue<Cook*> CooksAtRest;	//Cooks that are injuried
 	PriorityQueue<Cook*>  CooksAtBreak;
 	int O_waiting_count_VIP;//gives the count of the waiting VIP orders
 	int O_waiting_count_Normal; //gives the count of the waiting Normal orders
@@ -76,10 +78,9 @@ public:
 	// TODO: Add More Member Functions As Needed
 	//
 	//ADDED MEMBER FUNCTIONS TO ENQUEUE IN THE NEWELLY CREATED QUEUES
-	void AddtoVIP_OrdersWaitingQueue(Order* ord);  //enqueues the order in th VIP waiting queue
+	//void AddtoVIP_OrdersWaitingQueue(Order* ord);  //enqueues the order in th VIP waiting queue
 	void AddtoNormal_OrdersWaitingQueue(Order* ord); //enqueues the order in the Normal waiting queue
 	void AddtoVegan_OrdersWaitingQueue(Order* ord); //enqueues the order in the Vegan waiting list
-	void AddtoVIP_OrdersWaitingPriorityQueue(Order* ord);
 	void promotion(int id, double);
 	/// ===================    DEMO-related functions. Should be removed in phases 1&2   ================= 
 	void Just_A_Demo();	//just to show a demo and should be removed in phase1 1 & 2
@@ -93,7 +94,9 @@ public:
 	void assignmentfunction();
 	void WaitingOrdersToServed();
 	Order* WaitingOrderVIPdequeue();  //Removes VIP orders from the waiting and returns removed order
+	Order* WaitingOrderVIPdequeuePriority();  
 	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
+	void AssigningCookToOrder(Order*,Cook*);
 
 };
 

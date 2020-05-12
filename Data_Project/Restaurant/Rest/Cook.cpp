@@ -50,3 +50,23 @@ void Cook::SetOrderAssignedTo(Order* ORD)
 {
 	OrderAssignedTo=ORD;
 }
+
+int Cook::GetSpeed()
+{
+	return speed;
+}
+
+void Cook::SetAvailabilityTime(int time)
+{
+	AvailabilityTime=time;
+}
+
+void Cook::SetCookStatus(COOK_STAT stat)
+{
+	CookStatus=stat;
+}
+
+int Cook::GetBreakDuration()
+{
+	return BreakDuration;
+}

@@ -81,3 +81,13 @@ void Order::SetType(ORD_TYPE Otype)
 {
 	type = Otype;
 }
+
+int Order::GetSize() const
+{
+	return Size;
+}
+
+void Order::SetWaitingTime(int WT)
+{
+	WatingTime=WT;
+}
