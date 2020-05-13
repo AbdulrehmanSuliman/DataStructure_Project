@@ -429,7 +429,7 @@ void Restaurant::SimpleSimulator()
 
 //This is just a demo function for project introductory phase
 //It should be removed starting phase 1
-void Restaurant::Just_A_Demo()
+/*void Restaurant::Just_A_Demo()
 {
 	
 	//
@@ -535,13 +535,13 @@ void Restaurant::Just_A_Demo()
 	pGUI->waitForClick();
 
 	
-}
+}*/
 ////////////////
 
-void Restaurant::AddtoDemoQueue(Order *pOrd)
+/*void Restaurant::AddtoDemoQueue(Order *pOrd)
 {
 	DEMO_Queue.enqueue(pOrd);
-}
+}*/
 
 /// ==> end of DEMO-related function
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -612,7 +612,8 @@ void Restaurant::LoadingFunction()
 	int SpeedNormalMin,SpeedNormalMax,SpeedVeganMin,SpeedVeganMax,SpeedVIPMin,SpeedVIPMax;
 	int OrderBeforeBreak;
 	int BreakNormalMin,BreakNormalMax,BreakveganMin,BreakveganMax,BreakVIPMin,BreakVIPMax;
-	double InjuryProb,RestPeriodInjured;
+	double InjuryProb;
+	int RestPeriodInjured;
 	int TimeBeforeProm,TimeBeforePromVIP;
 	int NumOfEvents;
 
