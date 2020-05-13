@@ -45,6 +45,8 @@ public:
 //=======
 	void setArrivalTime(int);
 	void SetServTime(int);
+	int getWaitingTime();
+	int getServingTime();
 };
 
 #endif

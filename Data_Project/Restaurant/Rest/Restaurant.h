@@ -34,6 +34,12 @@ private:
 	int VIP_MaxWaitingTime;		//Max time spent in the vip queue
 	double InjuryProbability;
 	int CookRestPeriodInjury;
+	int AutoPromoted_Count;
+	int Urgent_count;
+	int MaxWaitingTime;
+	int MinWaitingTime;
+	int MaxServingTime;
+	int MinServingTime;
 
 	PriorityQueue<Order*> VIP_OrdersWaitingPriorityQueue; //priority Queue to be used in phase 2
 	Queue<Order*> VIP_OrdersWaiting;  //VIP orders in waiting must be assigned to cook if any
@@ -61,18 +67,26 @@ private:
 	int C_Available_count_VIP; //gives the count of the available VIP cooks
 	int C_Available_count_Normal; //gives the count of the available Normal cooks
 	int C_Available_count_Vegan; //gives the count of the available Vegan cooks
+	int VIPO_silent_counter;
+	int NormO_silent_counter;
+	int VegO_silent_counter;
+	int VIPC_silent_counter;
+	int NormC_silent_counter;
+	int VegC_silent_counter;
 	void MovingBreakToAvailable();
 	void MovingRestToAvailable();
 	void CheckBusyCooks();
 	void SRV_to_Finshed(Order*);
 
-	void CancelOrder(int id);
+	//void CancelOrder(int id);
 
 	void WaitingOrdersToServed();
 	Order* WaitingOrderVIPdequeue();  //Removes VIP orders from the waiting and returns removed order
 	Order* WaitingOrderVIPdequeuePriority();  
-	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
+	//void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
 	void AssigningCookToOrder(Order*,Cook*);
+	void SilentMode();
+	void OutputFunction();
 public:
 
 	Restaurant();
@@ -94,6 +108,7 @@ public:
 	void AddtoNormal_OrdersWaitingQueue(Order* ord); //enqueues the order in the Normal waiting queue
 	void AddtoVegan_OrdersWaitingQueue(Order* ord); //enqueues the order in the Vegan waiting list
 	void promotion(int id, double);
+	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
 	/// ===================    DEMO-related functions. Should be removed in phases 1&2   ================= 
 	void Just_A_Demo();	//just to show a demo and should be removed in phase1 1 & 2
 	void AddtoDemoQueue(Order* po);	//adds an order to the demo queue
@@ -103,6 +118,7 @@ public:
 	void LoadingFunction();
 	void SimpleSimulator();
 	void assignmentfunction();
+	void CancelOrder(int id);
 };
 
 #endif

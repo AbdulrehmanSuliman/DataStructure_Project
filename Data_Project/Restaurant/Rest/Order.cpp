@@ -91,3 +91,11 @@ void Order::SetWaitingTime(int WT)
 {
 	WatingTime=WT;
 }
+int Order::getWaitingTime()
+{
+	return WatingTime;
+}
+int Order::getServingTime()
+{
+	return ServTime;
+}

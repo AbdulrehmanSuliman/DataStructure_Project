@@ -19,7 +19,20 @@ Restaurant::Restaurant()
 	C_Available_count_VIP = 0;
 	C_Available_count_Normal = 0;
 	C_Available_count_Vegan = 0;
+	NormO_silent_counter = 0;
+	VIPO_silent_counter = 0;
+	VegO_silent_counter = 0;
+	VIPC_silent_counter = 0;
+	NormC_silent_counter = 0;
+	VegC_silent_counter = 0;
+	AutoPromoted_Count=0;
+	Urgent_count=0;
+	MaxWaitingTime = 0;
+	MinWaitingTime = 1000000;
+	MaxServingTime = 0;
+	MinServingTime = 1000000;
 	timestep=0;
+	arrived_orders = 0;
 }
 
 void Restaurant::RunSimulation()
@@ -37,6 +50,7 @@ void Restaurant::RunSimulation()
 	case MODE_STEP:
 		break;
 	case MODE_SLNT:
+		SilentMode();
 		break;
 	/*case MODE_DEMO:
 		Just_A_Demo();*/
@@ -361,13 +375,13 @@ void Restaurant::SimpleSimulator()
 	bool FIRST_NORMAL=true;
 	bool FIRST_VIP=true;
 	bool FIRST_VEGAN=true;
-	while (EventsQueue.peekFront(current_event)!=false)// Not equal elmafrood ya amr #zaki
+	while (EventsQueue.peekFront(current_event)!=false || OrdersInServing.isEmpty() == false)// Not equal elmafrood ya amr #zaki
 	{
 		if (timestep==0)
 		{pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: 0,  Number of available Normal cooks: 0,  Number of available Vegan cooks: 0");}
 		else
 		{pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));}
-		if (timestep == current_event->getEventTime())
+		if (EventsQueue.peekFront(current_event) != false && timestep == current_event->getEventTime())
 		{
 			EventsQueue.dequeue(current_event);
 			//current_event->Execute(this);
@@ -397,65 +411,12 @@ void Restaurant::SimpleSimulator()
 		}
 		//pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
 		FillDrawingList();
-		if(VIP_OrdersWaiting.peekFront(gettingserviced)&&FIRST_VIP)
-		{
-			VIP_OrdersWaiting.dequeue(gettingserviced);
-			O_waiting_count_VIP--;
-			gettingserviced->setStatus(SRV);
-			FIRST_VIP=false;
-			OrdersInServing.enqueue(gettingserviced);
+		//while(!VIP_OrdersWaiting.isEmpty()||!Normal_OrdersWaiting.isEmpty()||!Vegan_OrdersWaiting.isEmpty()||!OrdersInServing.isEmpty())
+			assignmentfunction();
 		}
-		if (Normal_OrdersWaiting.peekFront(gettingserviced)&&FIRST_NORMAL)
-		{
-			Normal_OrdersWaiting.dequeue(gettingserviced);
-			O_waiting_count_Normal--;
-			gettingserviced->setStatus(SRV);
-			FIRST_NORMAL=false;
-			OrdersInServing.enqueue(gettingserviced);
-		}
-		if (Vegan_OrdersWaiting.peekFront(gettingserviced)&&FIRST_VEGAN)
-		{
-			Vegan_OrdersWaiting.dequeue(gettingserviced);
-			O_waiting_count_Vegan--;
-			gettingserviced->setStatus(SRV);
-			FIRST_VEGAN=false;
-			OrdersInServing.enqueue(gettingserviced);
-		}
-		if (timestep % 5 == 0)
-	{	
-		for(int i=0;i<3;i++)
-		{
-	
 
-			if(OrdersInServing.peekFront(gettingserviced))
-			{
-				if (gettingserviced->GetType() == TYPE_VIP)
-			{
-				OrdersInServing.dequeue(gettingserviced);
-				gettingserviced->setStatus(DONE);
-				OrdersFinished.enqueue(gettingserviced);
-				finished_orders++;
-			}
-				else if (gettingserviced->GetType() == TYPE_NRM)
-			{
-				OrdersInServing.dequeue(gettingserviced);
-				gettingserviced->setStatus(DONE);
-				OrdersFinished.enqueue(gettingserviced);
-				finished_orders++;
-			}
-				else  if(gettingserviced->GetType()==TYPE_VGAN)
-			{
-				OrdersInServing.dequeue(gettingserviced);
-				gettingserviced->setStatus(DONE);
-				OrdersFinished.enqueue(gettingserviced);
-				finished_orders++;
-			}
-			}
-		}
-		}
 		//pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
 		FillDrawingList();
-}
 }
 
 
@@ -590,11 +551,13 @@ void Restaurant::AddtoNormal_OrdersWaitingQueue(Order* ord)
 {
 	Normal_OrdersWaiting.enqueue(ord);
 	O_waiting_count_Normal++;
+	NormO_silent_counter++;
 }
 void Restaurant::AddtoVegan_OrdersWaitingQueue(Order* ord)
 {
 	Vegan_OrdersWaiting.enqueue(ord);
 	O_waiting_count_Vegan++;
+	VegO_silent_counter++;
 }
 
 
@@ -604,47 +567,47 @@ void Restaurant::promotion(int id, double moneyExtra)
 	Order* firstOrder;
 	int firstOrderID;
 	Normal_OrdersWaiting.peekFront(firstOrder);
-	if (!Normal_OrdersWaiting.isEmpty())
-	{
-		firstOrderID = firstOrder->GetID();
-	}
-	else
-	{
-		firstOrderID = -1;
-	}
-	Order* checkPeek = new Order(0, TYPE_NRM, 0);
-	if (firstOrderID == id)
-	{
-		Normal_OrdersWaiting.dequeue(OrderToPromote);
-		OrderToPromote->SetType(TYPE_VIP);
-		WaitingOrderVIPenqueue(OrderToPromote);
-		//VIP_OrdersWaiting.enqueue(OrderToPromote);  //,OrderToPromote->CalcPriority_VIP_order()
-		OrderToPromote->SetMoney(OrderToPromote->getMoney() + moneyExtra);
-		Normal_OrdersWaiting.peekFront(firstOrder);
-		firstOrderID = firstOrder->GetID();
-	}
-	while (checkPeek->GetID() != firstOrderID && Normal_OrdersWaiting.dequeue(OrderToPromote))
-	{
-		if (OrderToPromote->GetID() == id)
+		if (!Normal_OrdersWaiting.isEmpty())
 		{
+			firstOrderID = firstOrder->GetID();
+		}
+		else
+		{
+			firstOrderID = -1;
+		}
+		Order* checkPeek = new Order(0, TYPE_NRM, 0);
+		if (firstOrderID == id)
+		{
+			Normal_OrdersWaiting.dequeue(OrderToPromote);
 			OrderToPromote->SetType(TYPE_VIP);
 			WaitingOrderVIPenqueue(OrderToPromote);
 			//VIP_OrdersWaiting.enqueue(OrderToPromote);  //,OrderToPromote->CalcPriority_VIP_order()
 			OrderToPromote->SetMoney(OrderToPromote->getMoney() + moneyExtra);
+			Normal_OrdersWaiting.peekFront(firstOrder);
+			firstOrderID = firstOrder->GetID();
 		}
-		else
+		while (checkPeek->GetID() != firstOrderID && Normal_OrdersWaiting.dequeue(OrderToPromote))
 		{
-			Normal_OrdersWaiting.enqueue(OrderToPromote);
+			if (OrderToPromote->GetID() == id)
+			{
+				OrderToPromote->SetType(TYPE_VIP);
+				WaitingOrderVIPenqueue(OrderToPromote);
+				//VIP_OrdersWaiting.enqueue(OrderToPromote);  //,OrderToPromote->CalcPriority_VIP_order()
+				OrderToPromote->SetMoney(OrderToPromote->getMoney() + moneyExtra);
+			}
+			else
+			{
+				Normal_OrdersWaiting.enqueue(OrderToPromote);
 
+			}
+			Normal_OrdersWaiting.peekFront(checkPeek);
 		}
-		Normal_OrdersWaiting.peekFront(checkPeek);
-	}
-	delete checkPeek;
+	
 }
 
 void Restaurant::LoadingFunction()
 {
-	ifstream file ("Simulation_1.txt");
+	ifstream file ("TestCase_1.txt");
 	int NumOfCooksVIP,NumOfCooksNormal,NumOfCooksVegan;
 	int SpeedNormalMin,SpeedNormalMax,SpeedVeganMin,SpeedVeganMax,SpeedVIPMin,SpeedVIPMax;
 	int OrderBeforeBreak;
@@ -697,7 +660,9 @@ void Restaurant::LoadingFunction()
 	C_Available_count_VIP = NumOfCooksVIP;
 	C_Available_count_Normal = NumOfCooksNormal;
 	C_Available_count_Vegan = NumOfCooksVegan;
-	
+	VIPC_silent_counter = NumOfCooksVIP;
+	NormC_silent_counter = NumOfCooksNormal;
+	VegC_silent_counter = NumOfCooksVegan;
 	int eventscounter=0;
 	char WhichEvent,OrderType;
 	int Executiontime,id;
@@ -739,8 +704,138 @@ void Restaurant::LoadingFunction()
 		eventscounter++;
 	}
 }
+void Restaurant::OutputFunction()
+{
+	int AvgWait;
+	int AvgServ;
+	int AutoPromotedPercent;
+	Order* doneOrders;
+	AvgWait = (MaxWaitingTime + MinWaitingTime) / 2;
+	AvgServ = (MaxServingTime + MinServingTime) / 2;
+	AutoPromotedPercent = (AutoPromoted_Count / arrived_orders) * 100;
+	ofstream OutPutFile;
+	OutPutFile.open("OutPutFile");
+	OutPutFile << "FT"<<"	"<<"ID"<<"	"<<"AT"<<"	"<<"WT"<<"	"<<"ST"<<endl;
+	while (OrdersFinished.dequeue(doneOrders))
+	{
+		OutPutFile << doneOrders->getWaitingTime() + doneOrders->GetServTime() <<"	"<< doneOrders->GetID()<<"	"<< doneOrders->getArrivalTime()<<"	"<< doneOrders->getWaitingTime()<<"	"<< doneOrders->getServingTime()<<endl;
+
+	}
+	OutPutFile << "Orders: " << NormO_silent_counter+VIPO_silent_counter+VegO_silent_counter << "	" << "[ Norm: " << NormO_silent_counter << ", " << "Veg: " << VegO_silent_counter << ", " << "VIP: " << VIPO_silent_counter << " ]" << endl;
+	OutPutFile << "cooks: " << (VIPC_silent_counter + NormC_silent_counter + VegC_silent_counter) << "	" << "[ Norm: " << NormC_silent_counter << ", " << "Veg: " << VegC_silent_counter << ", " << "VIP: " << VIPC_silent_counter << " ]" << endl;
+	OutPutFile << "Avg Wait= " << AvgWait << ", " << "Avg Serv= " << AvgServ << endl;
+	OutPutFile << "Urgent Orders: " << Urgent_count << ", " << "Auto-promotion: " << AutoPromotedPercent << "%" << endl;
+	OutPutFile.close();
+	cin.get();
+}
+void  Restaurant::SilentMode()
+{
+	LoadingFunction();
+	Event* current_event;
+	Order* gettingserviced;
+	bool FIRST_NORMAL = true;
+	bool FIRST_VIP = true;
+	bool FIRST_VEGAN = true;
+	while (EventsQueue.peekFront(current_event) != false)// Not equal elmafrood ya amr #zaki
+	{
+		if (timestep == 0)
+		{
+			pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: 0,  Number of available Normal cooks: 0,  Number of available Vegan cooks: 0");
+		}
+		else
+		{
+			pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
+		}
+		if (timestep == current_event->getEventTime())
+		{
+			EventsQueue.dequeue(current_event);
+			//current_event->Execute(this);
+			if (current_event == dynamic_cast<CancellationEvent*> (current_event))
+			{
+				current_event->Execute(this);
+				canceled_orders++;
+			}
+			if (current_event == dynamic_cast<ArrivalEvent*> (current_event))
+			{
+				current_event->Execute(this);
+				arrived_orders++;
+			}
+			if (current_event == dynamic_cast<PromotionEvent*>(current_event))
+			{
+				current_event->Execute(this);
+			}
+
+		}
+		else /*if(timestep <= current_event->getEventTime())*/
+		{
+			pGUI->waitForClick();
+			FIRST_NORMAL = true;
+			FIRST_VIP = true;
+			FIRST_VEGAN = true;
+			timestep++;
+		}
+		//pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
+		FillDrawingList();
+		if (VIP_OrdersWaiting.peekFront(gettingserviced) && FIRST_VIP)
+		{
+			VIP_OrdersWaiting.dequeue(gettingserviced);
+			O_waiting_count_VIP--;
+			gettingserviced->setStatus(SRV);
+			FIRST_VIP = false;
+			OrdersInServing.enqueue(gettingserviced);
+		}
+		if (Normal_OrdersWaiting.peekFront(gettingserviced) && FIRST_NORMAL)
+		{
+			Normal_OrdersWaiting.dequeue(gettingserviced);
+			O_waiting_count_Normal--;
+			gettingserviced->setStatus(SRV);
+			FIRST_NORMAL = false;
+			OrdersInServing.enqueue(gettingserviced);
+		}
+		if (Vegan_OrdersWaiting.peekFront(gettingserviced) && FIRST_VEGAN)
+		{
+			Vegan_OrdersWaiting.dequeue(gettingserviced);
+			O_waiting_count_Vegan--;
+			gettingserviced->setStatus(SRV);
+			FIRST_VEGAN = false;
+			OrdersInServing.enqueue(gettingserviced);
+		}
+		if (timestep % 5 == 0)
+		{
+			for (int i = 0; i < 3; i++)
+			{
 
 
+				if (OrdersInServing.peekFront(gettingserviced))
+				{
+					if (gettingserviced->GetType() == TYPE_VIP)
+					{
+						OrdersInServing.dequeue(gettingserviced);
+						gettingserviced->setStatus(DONE);
+						OrdersFinished.enqueue(gettingserviced);
+						finished_orders++;
+					}
+					else if (gettingserviced->GetType() == TYPE_NRM)
+					{
+						OrdersInServing.dequeue(gettingserviced);
+						gettingserviced->setStatus(DONE);
+						OrdersFinished.enqueue(gettingserviced);
+						finished_orders++;
+					}
+					else  if (gettingserviced->GetType() == TYPE_VGAN)
+					{
+						OrdersInServing.dequeue(gettingserviced);
+						gettingserviced->setStatus(DONE);
+						OrdersFinished.enqueue(gettingserviced);
+						finished_orders++;
+					}
+				}
+			}
+		}
+		//pGUI->PrintMessage(Timestep, "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
+		FillDrawingList();
+	}
+}
 void Restaurant::CancelOrder(int id)
 {
 	Order* deleteorder;
@@ -827,12 +922,24 @@ void Restaurant::WaitingOrderVIPenqueue(Order* addorder)
 {
 	VIP_OrdersWaiting.enqueue(addorder);
 	VIP_OrdersWaitingPriorityQueue.enqueue(addorder,addorder->CalcPriority_VIP_order());
+	O_waiting_count_VIP++;
+	VIPO_silent_counter++;
 }
 
 void Restaurant::AssigningCookToOrder(Order* ord,Cook* cook)
 {
+	int temp;
 	cook->SetOrderAssignedTo(ord);
 	ord->SetWaitingTime(timestep-ord->getArrivalTime());
+	temp = ord->getWaitingTime();
+	if (temp > MaxWaitingTime)
+	{
+		MaxWaitingTime = temp;
+	}
+	if (temp < MinWaitingTime)
+	{
+		MinWaitingTime = temp;
+	}
 	ord->setStatus(SRV);
 	BusyCooks.enqueue(cook,ord->GetServTime());
 	OrdersInServing.enqueue(ord);
@@ -843,21 +950,25 @@ void Restaurant::WaitingOrdersToServed()
 	Cook* CookAvailable;
 	Order* ServingOrder;
 	Order* PromotionOrder;
+	int temp;
 	Normal_OrdersWaiting.peekFront(PromotionOrder);
 	int ServingTime;
-	while( (timestep-PromotionOrder->getArrivalTime()) == TimeBeforePromotion )
+	while(Normal_OrdersWaiting.peekFront(PromotionOrder) && (timestep-PromotionOrder->getArrivalTime()) == TimeBeforePromotion )
 	{
 		Normal_OrdersWaiting.dequeue(PromotionOrder);
 		WaitingOrderVIPenqueue(PromotionOrder);
 		Normal_OrdersWaiting.peekFront(PromotionOrder);
+		AutoPromoted_Count++;
 	}
 	bool urgent=true;
 	while (urgent)
 	{
+		
 		urgent=false;
 		VIP_OrdersWaiting.peekFront(ServingOrder);
-		if ( (timestep-ServingOrder->getArrivalTime()) == VIP_MaxWaitingTime)
+		if (VIP_OrdersWaiting.peekFront(ServingOrder) &&(timestep-ServingOrder->getArrivalTime()) == VIP_MaxWaitingTime)
 		{
+			Urgent_count++;
 			urgent=true;
 			ServingOrder=WaitingOrderVIPdequeue();
 			ServingOrder->setStatus(SRV);
@@ -925,6 +1036,14 @@ void Restaurant::WaitingOrdersToServed()
 			VIP_AvailableCook.dequeue(CookAvailable);
 			ServingTime=ServingOrder->GetSize()/CookAvailable->GetSpeed();
 			ServingOrder->SetServTime(ServingTime);
+			if (ServingTime > MaxServingTime)
+			{
+				MaxServingTime = ServingTime;
+			}
+			if (ServingTime < MinServingTime)
+			{
+				MinServingTime = ServingTime;
+			}
 			CookAvailable->SetAvailabilityTime(timestep+ServingTime);
 			AssigningCookToOrder(ServingOrder,CookAvailable);
 			C_Available_count_VIP--;
@@ -934,6 +1053,14 @@ void Restaurant::WaitingOrdersToServed()
 			Normal_AvailableCook.dequeue(CookAvailable);
 			ServingTime=ServingOrder->GetSize()/CookAvailable->GetSpeed();
 			ServingOrder->SetServTime(ServingTime);
+			if (ServingTime > MaxServingTime)
+			{
+				MaxServingTime = ServingTime;
+			}
+			if (ServingTime < MinServingTime)
+			{
+				MinServingTime = ServingTime;
+			}
 			CookAvailable->SetAvailabilityTime(timestep+ServingTime);
 			AssigningCookToOrder(ServingOrder,CookAvailable);
 			C_Available_count_Normal--;
@@ -943,6 +1070,14 @@ void Restaurant::WaitingOrdersToServed()
 			Vegan_AvailableCook.dequeue(CookAvailable);
 			ServingTime=ServingOrder->GetSize()/CookAvailable->GetSpeed();
 			ServingOrder->SetServTime(ServingTime);
+			if (ServingTime > MaxServingTime)
+			{
+				MaxServingTime = ServingTime;
+			}
+			if (ServingTime < MinServingTime)
+			{
+				MinServingTime = ServingTime;
+			}
 			CookAvailable->SetAvailabilityTime(timestep+ServingTime);
 			AssigningCookToOrder(ServingOrder,CookAvailable);
 			C_Available_count_Vegan--;
@@ -954,6 +1089,14 @@ void Restaurant::WaitingOrdersToServed()
 		Vegan_AvailableCook.dequeue(CookAvailable);
 		ServingTime=ServingOrder->GetSize()/CookAvailable->GetSpeed();
 		ServingOrder->SetServTime(ServingTime);
+		if (ServingTime > MaxServingTime)
+		{
+			MaxServingTime = ServingTime;
+		}
+		if (ServingTime < MinServingTime)
+		{
+			MinServingTime = ServingTime;
+		}
 		CookAvailable->SetAvailabilityTime(timestep+ServingTime);
 		AssigningCookToOrder(ServingOrder,CookAvailable);
 		O_waiting_count_Vegan--;
@@ -964,6 +1107,14 @@ void Restaurant::WaitingOrdersToServed()
 		Normal_OrdersWaiting.dequeue(ServingOrder);
 		ServingTime=ServingOrder->GetSize()/CookAvailable->GetSpeed();
 		ServingOrder->SetServTime(ServingTime);
+		if (ServingTime > MaxServingTime)
+		{
+			MaxServingTime = ServingTime;
+		}
+		if (ServingTime < MinServingTime)
+		{
+			MinServingTime = ServingTime;
+		}
 		CookAvailable->SetAvailabilityTime(timestep+ServingTime);
 		O_waiting_count_Normal--;
 		if (Normal_AvailableCook.peekFront(CookAvailable))
@@ -1126,7 +1277,7 @@ void Restaurant::SRV_to_Finshed(Order*finished)
 		{
 			temp.enqueue(tempOrd);
 		}
-	}
+	} 
 	while(temp.dequeue(tempOrd))
 	{
 		OrdersInServing.enqueue(tempOrd);
