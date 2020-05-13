@@ -1145,24 +1145,7 @@ void Restaurant::MovingBreakToAvailable()
 			In_BreakCook->SetCookStatus(SAFE);
 
 		}
-		if(In_BreakCook->GetType()==TYPE_VIP)
-		{
-			VIP_AvailableCook.enqueue(In_BreakCook);
-			C_Available_count_VIP++;
-
-		}
-		else if(In_BreakCook->GetType()==TYPE_NRM)
-		{
-			Normal_AvailableCook.enqueue(In_BreakCook);
-			C_Available_count_Normal++;
-		}
-		else
-		{
-			Vegan_AvailableCook.enqueue(In_BreakCook);
-			C_Available_count_Vegan++;
-		}
-		if(CooksAtBreak.peekFront(In_BreakCook))
-			CooksAtBreak.peekFront(In_BreakCook);
+		MoveToAvailable(In_BreakCook);
 	}
 }
 void Restaurant::MovingRestToAvailable()
@@ -1178,24 +1161,7 @@ void Restaurant::MovingRestToAvailable()
 			In_RestCook->SetCookStatus(SAFE);
 
 		}
-		if(In_RestCook->GetType()==TYPE_VIP)
-		{
-			VIP_AvailableCook.enqueue(In_RestCook);
-			C_Available_count_VIP++;
-
-		}
-		else if(In_RestCook->GetType()==TYPE_NRM)
-		{
-			Normal_AvailableCook.enqueue(In_RestCook);
-			C_Available_count_Normal++;
-		}
-		else
-		{
-			Vegan_AvailableCook.enqueue(In_RestCook);
-			C_Available_count_Vegan++;
-		}
-		if(CooksAtRest.peekFront(In_RestCook))
-		CooksAtRest.peekFront(In_RestCook);
+		MoveToAvailable(In_RestCook);
 	}
 }
 void Restaurant::CheckBusyCooks()
@@ -1234,21 +1200,7 @@ void Restaurant::CheckBusyCooks()
 			else
 			{
 				BusyCook->SetAvailabilityTime(NULL);
-				if(BusyCook->GetType()==TYPE_VIP)
-				{
-					VIP_AvailableCook.enqueue(BusyCook);
-					C_Available_count_VIP++;
-				}
-				else if(BusyCook->GetType()==TYPE_NRM)
-				{
-					Normal_AvailableCook.enqueue(BusyCook);
-					C_Available_count_Normal++;
-				}
-				else
-				{
-					Vegan_AvailableCook.enqueue(BusyCook);
-					C_Available_count_Vegan++;
-				}
+				MoveToAvailable(BusyCook);
 			}
 			}
 		}
@@ -1282,4 +1234,23 @@ void Restaurant::SRV_to_Finshed(Order*finished)
 	{
 		OrdersInServing.enqueue(tempOrd);
 	}
+}
+void Restaurant::MoveToAvailable(Cook* AvailableCook)
+{
+	if(AvailableCook->GetType()==TYPE_VIP)
+		{
+			VIP_AvailableCook.enqueue(AvailableCook);
+			C_Available_count_VIP++;
+
+		}
+		else if(AvailableCook->GetType()==TYPE_NRM)
+		{
+			Normal_AvailableCook.enqueue(AvailableCook);
+			C_Available_count_Normal++;
+		}
+		else
+		{
+			Vegan_AvailableCook.enqueue(AvailableCook);
+			C_Available_count_Vegan++;
+		}
 }

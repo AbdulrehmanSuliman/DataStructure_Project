@@ -67,12 +67,16 @@ private:
 	int C_Available_count_VIP; //gives the count of the available VIP cooks
 	int C_Available_count_Normal; //gives the count of the available Normal cooks
 	int C_Available_count_Vegan; //gives the count of the available Vegan cooks
+<<<<<<< HEAD
 	int VIPO_silent_counter;
 	int NormO_silent_counter;
 	int VegO_silent_counter;
 	int VIPC_silent_counter;
 	int NormC_silent_counter;
 	int VegC_silent_counter;
+=======
+	void MoveToAvailable(Cook* AvailableCook);
+>>>>>>> ef60b0c3ee792a0b409715a8f74db9317922feab
 	void MovingBreakToAvailable();
 	void MovingRestToAvailable();
 	void CheckBusyCooks();
@@ -91,7 +95,8 @@ public:
 
 	Restaurant();
 	~Restaurant();
-
+	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
+	void CancelOrder(int id);
 	void ExecuteEvents(int TimeStep);	//executes all events at current timestep
 	void RunSimulation();
 
@@ -107,14 +112,19 @@ public:
 	//void AddtoVIP_OrdersWaitingQueue(Order* ord);  //enqueues the order in th VIP waiting queue
 	void AddtoNormal_OrdersWaitingQueue(Order* ord); //enqueues the order in the Normal waiting queue
 	void AddtoVegan_OrdersWaitingQueue(Order* ord); //enqueues the order in the Vegan waiting list
-	void promotion(int id, double);
 	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
+	void promotion(int id, double);
+<<<<<<< HEAD
+	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
+=======
+	void CancelOrder(int id);
+>>>>>>> ef60b0c3ee792a0b409715a8f74db9317922feab
 	/// ===================    DEMO-related functions. Should be removed in phases 1&2   ================= 
 	void Just_A_Demo();	//just to show a demo and should be removed in phase1 1 & 2
 	void AddtoDemoQueue(Order* po);	//adds an order to the demo queue
 
 /// ================================================================================================== 
-
+	
 	void LoadingFunction();
 	void SimpleSimulator();
 	void assignmentfunction();
