@@ -731,6 +731,7 @@ void Restaurant::OutputFunction()
 }
 void  Restaurant::SilentMode()
 {
+	int tracker=0;
 	LoadingFunction();
 	Event* current_event;
 	Order* gettingserviced;
@@ -762,8 +763,9 @@ void  Restaurant::SilentMode()
 		else 
 		{	
 			timestep++;
+			assignmentfunction();
 		}
-		assignmentfunction();
+		tracker++;
 	}
 	OutputFunction();
 }
