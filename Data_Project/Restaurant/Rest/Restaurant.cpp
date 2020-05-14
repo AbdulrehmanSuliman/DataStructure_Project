@@ -874,7 +874,7 @@ void Restaurant::AssigningCookToOrder(Order* ord,Cook* cook)
 		MinWaitingTime = temp;
 	}
 	ord->setStatus(SRV);
-	BusyCooks.enqueue(cook,ord->GetServTime());
+	BusyCooks.enqueue(cook,-cook->getAvailabilityTime());
 	OrdersInServing.enqueue(ord);
 }
 
@@ -896,7 +896,6 @@ void Restaurant::WaitingOrdersToServed()
 	bool urgent=true;
 	while (urgent)
 	{
-		
 		urgent=false;
 		VIP_OrdersWaiting.peekFront(ServingOrder);
 		if (VIP_OrdersWaiting.peekFront(ServingOrder) &&(timestep-ServingOrder->getArrivalTime()) == VIP_MaxWaitingTime)
