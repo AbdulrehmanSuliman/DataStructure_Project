@@ -52,9 +52,6 @@ void Restaurant::RunSimulation()
 	case MODE_SLNT:
 		SilentMode();
 		break;
-	/*case MODE_DEMO:
-		Just_A_Demo();*/
-
 	};
 
 }
@@ -758,12 +755,11 @@ void  Restaurant::SilentMode()
 			{
 				current_event->Execute(this);
 			}
-
 		}
 		else 
 		{	
-			timestep++;
 			assignmentfunction();
+			timestep++;
 		}
 		tracker++;
 	}
@@ -1144,6 +1140,7 @@ void Restaurant::assignmentfunction()
 	MovingRestToAvailable();
 	CheckBusyCooks();
 	WaitingOrdersToServed();
+	CheckBusyCooks();
 }
 void Restaurant::SRV_to_Finshed(Order*finished)
 {
