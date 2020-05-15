@@ -30,6 +30,7 @@ Restaurant::Restaurant()
 	inj_C = 0;
 	timestep=0;
 	arrived_orders = 0;
+	promoted_orders = 0;
 }
 
 void Restaurant::RunSimulation()
@@ -40,11 +41,14 @@ void Restaurant::RunSimulation()
 	switch (mode)	//Add a function for each mode in next phases
 	{
 	case MODE_INTR:
-		SimpleSimulator();
+		Interactive();
 		pGUI->PrintMessage("SImulation ENDED. click to exit.");
 		pGUI->waitForClick();
 		break;
 	case MODE_STEP:
+		StepByStep();
+		pGUI->PrintMessage("SImulation ENDED. click to exit.");
+		pGUI->waitForClick();
 		break;
 	case MODE_SLNT:
 		SilentMode();
@@ -794,6 +798,94 @@ void  Restaurant::SilentMode()
 			timestep++;
 		}
 		tracker++;
+	}
+	OutputFunction();
+}
+
+void Restaurant::Interactive()
+{
+	LoadingFunction();
+	Event* current_event;
+	Order* gettingserviced;
+	while (EventsQueue.peekFront(current_event) || OrdersInServing.peekFront(gettingserviced) || VIP_OrdersWaiting.peekFront(gettingserviced) || Normal_OrdersWaiting.peekFront(gettingserviced) || Vegan_OrdersWaiting.peekFront(gettingserviced))
+	{
+		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
+
+
+		while (current_event->getEventTime() == timestep)
+		{
+			if (EventsQueue.isEmpty())
+				return;
+			EventsQueue.dequeue(current_event);
+			if (current_event == dynamic_cast<CancellationEvent*> (current_event))
+			{
+				current_event->Execute(this);
+				canceled_orders++;
+			}
+			if (current_event == dynamic_cast<ArrivalEvent*> (current_event))
+			{
+				current_event->Execute(this);
+				arrived_orders++;
+			}
+			if (current_event == dynamic_cast<PromotionEvent*>(current_event))
+			{
+				current_event->Execute(this);
+				promoted_orders++;
+			}
+		}
+
+		{
+			assignmentfunction();
+			FillDrawingList();
+			pGUI->waitForClick();
+			timestep++;
+
+		}
+
+	}
+	OutputFunction();
+}
+
+
+void Restaurant::StepByStep()
+{
+	LoadingFunction();
+	Event* current_event;
+	Order* gettingserviced;
+	while (EventsQueue.peekFront(current_event) || OrdersInServing.peekFront(gettingserviced) || VIP_OrdersWaiting.peekFront(gettingserviced) || Normal_OrdersWaiting.peekFront(gettingserviced) || Vegan_OrdersWaiting.peekFront(gettingserviced))
+	{
+		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
+		while (current_event->getEventTime() == timestep)
+		{
+			if (EventsQueue.isEmpty())
+				return;
+			EventsQueue.dequeue(current_event);
+			if (current_event == dynamic_cast<CancellationEvent*> (current_event))
+			{
+				current_event->Execute(this);
+				canceled_orders++;
+			}
+			if (current_event == dynamic_cast<ArrivalEvent*> (current_event))
+			{
+				current_event->Execute(this);
+				arrived_orders++;
+			}
+			if (current_event == dynamic_cast<PromotionEvent*>(current_event))
+			{
+				current_event->Execute(this);
+				promoted_orders++;
+			}
+		}
+
+		{
+			assignmentfunction();
+			Sleep(1000);
+			timestep++;
+			FillDrawingList();
+
+
+		}
+
 	}
 	OutputFunction();
 }

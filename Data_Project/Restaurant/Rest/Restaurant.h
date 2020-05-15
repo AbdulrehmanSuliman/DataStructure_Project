@@ -27,10 +27,11 @@ private:
 
 	///////////////////////////ADDED/////////////////////
 	int TimeBeforePromotion;   //is the time for the normal order will wait until promotion
-	int timestep;             //Added by zaki
-	int arrived_orders;       //Added by zaki
-	int finished_orders;      //Added by zaki
-	int canceled_orders;      //Added by zaki
+	int timestep;           
+	int arrived_orders;       
+	int finished_orders;      
+	int canceled_orders;     
+	int promoted_orders;
 	int VIP_MaxWaitingTime;		//Max time spent in the vip queue
 	double InjuryProbability;
 	int CookRestPeriodInjury;
@@ -87,6 +88,8 @@ private:
 	//void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
 	void AssigningCookToOrder(Order*,Cook*);
 	void SilentMode();
+	void Interactive();
+	void StepByStep();
 	void OutputFunction();
 public:
 

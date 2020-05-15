@@ -80,6 +80,19 @@ void GUI::PrintMessage(string msg1, string msg2, string msg3)
 
 
 }
+void GUI::PrintMessage(string msg1, string msg2, string msg3, string msg4, string msg5)
+{
+	ClearStatusBar();
+
+	pWind->SetPen(DARKRED);
+	pWind->SetFont(18, BOLD, BY_NAME, "Arial");
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.5), msg1);
+	pWind->DrawString(10, WindHeight + 20 - (int)(StatusBarHeight / 1.5), msg2);
+	pWind->DrawString(10, WindHeight + 40 - (int)(StatusBarHeight / 1.5), msg3);
+	pWind->DrawString(10, WindHeight + 60 - (int)(StatusBarHeight / 1.5), msg3);
+	pWind->DrawString(10, WindHeight + 80 - (int)(StatusBarHeight / 1.5), msg3);
+
+}
 //////////////////////////////////////////////////////////////////////////////////////////
 void GUI::DrawString(const int iX, const int iY, const string Text)
 {
