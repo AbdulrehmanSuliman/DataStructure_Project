@@ -8,7 +8,7 @@
 #include "..\Events\Event.h"
 #include"..\Generic_DS\PriorityQueue.h"
 
-
+#include "..\PriorityDESqueue.h"
 #include "Order.h"
 
 // it is the maestro of the project
@@ -36,10 +36,7 @@ private:
 	int CookRestPeriodInjury;
 	int AutoPromoted_Count;
 	int Urgent_count;
-	int MaxWaitingTime;
-	int MinWaitingTime;
-	int MaxServingTime;
-	int MinServingTime;
+	int inj_C;
 
 	PriorityQueue<Order*> VIP_OrdersWaitingPriorityQueue; //priority Queue to be used in phase 2
 	Queue<Order*> VIP_OrdersWaiting;  //VIP orders in waiting must be assigned to cook if any
