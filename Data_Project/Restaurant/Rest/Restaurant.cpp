@@ -606,7 +606,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 
 void Restaurant::LoadingFunction()
 {
-	ifstream file ("TestCase_1.txt");
+	ifstream file ("TestCase_4.txt");
 	int NumOfCooksVIP,NumOfCooksNormal,NumOfCooksVegan;
 	int SpeedNormalMin,SpeedNormalMax,SpeedVeganMin,SpeedVeganMax,SpeedVIPMin,SpeedVIPMax;
 	int OrderBeforeBreak;
@@ -812,10 +812,10 @@ void Restaurant::Interactive()
 		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
 
 
-		while (current_event->getEventTime() == timestep)
+		while (EventsQueue.peekFront(current_event) && current_event->getEventTime() == timestep)
 		{
-			if (EventsQueue.isEmpty())
-				return;
+			/*if (EventsQueue.isEmpty())
+				return;*/
 			EventsQueue.dequeue(current_event);
 			if (current_event == dynamic_cast<CancellationEvent*> (current_event))
 			{
@@ -855,10 +855,10 @@ void Restaurant::StepByStep()
 	while (EventsQueue.peekFront(current_event) || OrdersInServing.peekFront(gettingserviced) || VIP_OrdersWaiting.peekFront(gettingserviced) || Normal_OrdersWaiting.peekFront(gettingserviced) || Vegan_OrdersWaiting.peekFront(gettingserviced))
 	{
 		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
-		while (current_event->getEventTime() == timestep)
+		while (EventsQueue.peekFront(current_event) && current_event->getEventTime() == timestep)
 		{
-			if (EventsQueue.isEmpty())
-				return;
+			/*if (EventsQueue.isEmpty())
+				return;*/
 			EventsQueue.dequeue(current_event);
 			if (current_event == dynamic_cast<CancellationEvent*> (current_event))
 			{
