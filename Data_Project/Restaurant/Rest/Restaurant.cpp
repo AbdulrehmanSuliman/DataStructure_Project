@@ -606,7 +606,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 
 void Restaurant::LoadingFunction()
 {
-	ifstream file ("TestCase_4.txt");
+	ifstream file ("TestCase_6.txt");
 	int NumOfCooksVIP,NumOfCooksNormal,NumOfCooksVegan;
 	int SpeedNormalMin,SpeedNormalMax,SpeedVeganMin,SpeedVeganMax,SpeedVIPMin,SpeedVIPMax;
 	int OrderBeforeBreak;
@@ -999,6 +999,7 @@ void Restaurant::WaitingOrdersToServed()
 	while(Normal_OrdersWaiting.peekFront(PromotionOrder) && (timestep-PromotionOrder->getArrivalTime()) == TimeBeforePromotion )
 	{
 		Normal_OrdersWaiting.dequeue(PromotionOrder);
+		PromotionOrder->SetType(TYPE_VIP);
 		WaitingOrderVIPenqueue(PromotionOrder);
 		Normal_OrdersWaiting.peekFront(PromotionOrder);
 		AutoPromoted_Count++;
