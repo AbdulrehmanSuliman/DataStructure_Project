@@ -87,10 +87,10 @@ void GUI::PrintMessage(string msg1, string msg2, string msg3, string msg4, strin
 	pWind->SetPen(DARKRED);
 	pWind->SetFont(18, BOLD, BY_NAME, "Arial");
 	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.5), msg1);
-	pWind->DrawString(10, WindHeight + 20 - (int)(StatusBarHeight / 1.5), msg2);
-	pWind->DrawString(10, WindHeight + 40 - (int)(StatusBarHeight / 1.5), msg3);
-	pWind->DrawString(10, WindHeight + 60 - (int)(StatusBarHeight / 1.5), msg3);
-	pWind->DrawString(10, WindHeight + 80 - (int)(StatusBarHeight / 1.5), msg3);
+	pWind->DrawString(10, WindHeight + 15 - (int)(StatusBarHeight / 1.5), msg2);
+	pWind->DrawString(10, WindHeight + 30 - (int)(StatusBarHeight / 1.5), msg3);
+	pWind->DrawString(10, WindHeight + 45 - (int)(StatusBarHeight / 1.5), msg4);
+	pWind->DrawString(10, WindHeight + 60 - (int)(StatusBarHeight / 1.5), msg5);
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////
