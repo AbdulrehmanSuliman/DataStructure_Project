@@ -708,7 +708,7 @@ void Restaurant::OutputFunction()
 {
 	float AvgWait;
 	float AvgServ;
-	float AutoPromotedPercent;
+	double AutoPromotedPercent;
 	Order* doneOrders;
 	float waitingTim=0;
 	float servingTim=0;
@@ -741,7 +741,7 @@ void Restaurant::OutputFunction()
 	/////////////////////////////////////////////////////////////////
 	AvgWait = (waitingTim/numF);
 	AvgServ = (servingTim/numF);
-	AutoPromotedPercent = (AutoPromoted_Count / numF) * 100;
+	AutoPromotedPercent = (double(AutoPromoted_Count) / double(numF)) * 100;
 	ofstream OutPutFile;
 	OutPutFile.open("OutPutFile");
 	OutPutFile << "FT"<<"	"<<"ID"<<"	"<<"AT"<<"	"<<"WT"<<"	"<<"ST"<<endl;
@@ -759,12 +759,11 @@ void Restaurant::OutputFunction()
 	OutPutFile << "Orders: " << NormO_silent_counter+VIPO_silent_counter+VegO_silent_counter << "	" << "[ Norm: " << NormO_silent_counter << ", " << "Veg: " << VegO_silent_counter << ", " << "VIP: " << VIPO_silent_counter << " ]" << endl;
 	OutPutFile << "cooks: " << (VIPC_silent_counter + NormC_silent_counter + VegC_silent_counter) << "	" << "[ Norm: " << NormC_silent_counter << ", " << "Veg: " << VegC_silent_counter << ", " << "VIP: " << VIPC_silent_counter <<", injured: "<< inj_C << " ]" << endl;
 	OutPutFile << "Avg Wait= " << AvgWait << ", " << "Avg Serv= " << AvgServ << endl;
-	OutPutFile << "Urgent Orders: " << Urgent_count << ", " << "Auto-promotion: " << AutoPromotedPercent << "%" << endl;
+	OutPutFile << "Urgent Orders: " << Urgent_count << ", " << "Auto-promotion: " <<AutoPromotedPercent << "%" << endl;
 	OutPutFile.close();
 }
 void  Restaurant::SilentMode()
 {
-	int tracker=0;
 	LoadingFunction();
 	Event* current_event;
 	Order* gettingserviced;
@@ -797,7 +796,6 @@ void  Restaurant::SilentMode()
 			assignmentfunction();
 			timestep++;
 		}
-		tracker++;
 	}
 	OutputFunction();
 }
@@ -807,10 +805,9 @@ void Restaurant::Interactive()
 	LoadingFunction();
 	Event* current_event;
 	Order* gettingserviced;
+	pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of waiting VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
 	while (EventsQueue.peekFront(current_event) || OrdersInServing.peekFront(gettingserviced) || VIP_OrdersWaiting.peekFront(gettingserviced) || Normal_OrdersWaiting.peekFront(gettingserviced) || Vegan_OrdersWaiting.peekFront(gettingserviced))
 	{
-		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
-
 
 		while (EventsQueue.peekFront(current_event) && current_event->getEventTime() == timestep)
 		{
@@ -833,15 +830,11 @@ void Restaurant::Interactive()
 				promoted_orders++;
 			}
 		}
-
-		{
-			assignmentfunction();
-			FillDrawingList();
-			pGUI->waitForClick();
-			timestep++;
-
-		}
-
+		assignmentfunction();
+		pGUI->waitForClick();
+		timestep++;
+		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of waiting VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
+		FillDrawingList();
 	}
 	OutputFunction();
 }
@@ -998,6 +991,7 @@ void Restaurant::WaitingOrdersToServed()
 	int ServingTime;
 	while(Normal_OrdersWaiting.peekFront(PromotionOrder) && (timestep-PromotionOrder->getArrivalTime()) == TimeBeforePromotion )
 	{
+		O_waiting_count_Normal--;
 		Normal_OrdersWaiting.dequeue(PromotionOrder);
 		PromotionOrder->SetType(TYPE_VIP);
 		WaitingOrderVIPenqueue(PromotionOrder);
