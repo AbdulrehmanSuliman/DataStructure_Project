@@ -593,6 +593,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 		OrderToPromote->SetMoney(OrderToPromote->getMoney() + moneyExtra);
 		Normal_OrdersWaiting.peekFront(firstOrder);
 		firstOrderID = firstOrder->GetID();
+		O_waiting_count_Normal--;
 	}
 	while (checkPeek->GetID() != firstOrderID && Normal_OrdersWaiting.dequeue(OrderToPromote))
 	{
@@ -602,6 +603,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 			WaitingOrderVIPenqueue(OrderToPromote);
 			//VIP_OrdersWaiting.enqueue(OrderToPromote);  //,OrderToPromote->CalcPriority_VIP_order()
 			OrderToPromote->SetMoney(OrderToPromote->getMoney() + moneyExtra);
+			O_waiting_count_Normal--;
 		}
 		else
 		{
@@ -837,7 +839,7 @@ void Restaurant::SimMODE(int mode)
 
 
 }
-/*
+
 void  Restaurant::SilentMode()
 {
 
@@ -879,7 +881,7 @@ void  Restaurant::SilentMode()
 	}
 	OutputFunction();
 }
-
+/*
 void Restaurant::Interactive()
 {
 	LoadingFunction();
