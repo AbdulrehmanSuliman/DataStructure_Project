@@ -38,6 +38,10 @@ private:
 	int AutoPromoted_Count;
 	int Urgent_count;
 	int inj_C;
+	string print;
+	int totalservVIP;
+	int totalservNRM;
+	int totalservVGAN;
 
 	PriorityQueue<Order*> VIP_OrdersWaitingPriorityQueue; //priority Queue to be used in phase 2
 	Queue<Order*> VIP_OrdersWaiting;  //VIP orders in waiting must be assigned to cook if any
@@ -86,11 +90,12 @@ private:
 	Order* WaitingOrderVIPdequeue();  //Removes VIP orders from the waiting and returns removed order
 	Order* WaitingOrderVIPdequeuePriority();  
 	//void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
-	void AssigningCookToOrder(Order*,Cook*);
+	void AssigningCookToOrder(Order*,Cook*, string&);
 	void SilentMode();
 	void Interactive();
 	void StepByStep();
 	void OutputFunction();
+	void SimMODE(int);
 public:
 
 	Restaurant();

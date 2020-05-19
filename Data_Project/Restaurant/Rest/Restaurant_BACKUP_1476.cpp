@@ -748,15 +748,15 @@ void Restaurant::OutputFunction()
 		ID_Done = peekFirstDone->GetID();
 	}
 	/////////////////////////////////////////////////////////////////
-
+<<<<<<< HEAD
 	AvgWait = (waitingTim/numF);
 	AvgServ = (servingTim/numF);
 	AutoPromotedPercent = (double(AutoPromoted_Count) / double(numF)) * 100;
-
-
-
-
-
+=======
+	AvgWait = (waitingTim / numF);
+	AvgServ = (servingTim / numF);
+	AutoPromotedPercent = (AutoPromoted_Count / numF) * 100;
+>>>>>>> 09518f0728fac2613fa0fce7ee00bfa8f05bcd07
 	ofstream OutPutFile;
 	OutPutFile.open("OutPutFile");
 	OutPutFile << "FT" << "	" << "ID" << "	" << "AT" << "	" << "WT" << "	" << "ST" << endl;
@@ -839,10 +839,10 @@ void Restaurant::SimMODE(int mode)
 /*
 void  Restaurant::SilentMode()
 {
-
-
-
-
+<<<<<<< HEAD
+=======
+	int tracker = 0;
+>>>>>>> 09518f0728fac2613fa0fce7ee00bfa8f05bcd07
 	LoadingFunction();
 	Event* current_event;
 	Order* gettingserviced;
@@ -887,11 +887,11 @@ void Restaurant::Interactive()
 	pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of waiting VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
 	while (EventsQueue.peekFront(current_event) || OrdersInServing.peekFront(gettingserviced) || VIP_OrdersWaiting.peekFront(gettingserviced) || Normal_OrdersWaiting.peekFront(gettingserviced) || Vegan_OrdersWaiting.peekFront(gettingserviced))
 	{
+<<<<<<< HEAD
+=======
+		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan) , print , "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " +to_string(totalservVGAN));
 
-
-
-
-
+>>>>>>> 09518f0728fac2613fa0fce7ee00bfa8f05bcd07
 
 		while (EventsQueue.peekFront(current_event) && current_event->getEventTime() == timestep)
 		{
