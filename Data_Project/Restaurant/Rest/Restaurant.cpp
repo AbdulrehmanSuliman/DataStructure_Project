@@ -783,11 +783,10 @@ void Restaurant::SimMODE(int mode)
 	LoadingFunction();
 	Event* current_event;
 	Order* gettingserviced;
+	pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan), print, "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " + to_string(totalservVGAN));
 	while (EventsQueue.peekFront(current_event) || OrdersInServing.peekFront(gettingserviced) || VIP_OrdersWaiting.peekFront(gettingserviced) || Normal_OrdersWaiting.peekFront(gettingserviced) || Vegan_OrdersWaiting.peekFront(gettingserviced))
 	{
-		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan), print, "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " + to_string(totalservVGAN));
-
-
+		
 		while (EventsQueue.peekFront(current_event) && current_event->getEventTime() == timestep)
 		{
 			EventsQueue.dequeue(current_event);
@@ -812,6 +811,7 @@ void Restaurant::SimMODE(int mode)
 			print = "";
 			assignmentfunction();
 			FillDrawingList();
+			pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan), print, "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " + to_string(totalservVGAN));
 			pGUI->waitForClick();
 			timestep++;
 
@@ -820,8 +820,9 @@ void Restaurant::SimMODE(int mode)
 		{
 			print = "";
 			assignmentfunction();
-			Sleep(1000);
+			pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan), print, "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " + to_string(totalservVGAN));
 			FillDrawingList();
+			Sleep(1000);
 			timestep++;
 
 		}
