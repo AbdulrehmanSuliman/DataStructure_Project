@@ -809,6 +809,7 @@ void Restaurant::SimMODE(int mode)
 		}
 		if (mode == 1)
 		{
+			print = "";
 			assignmentfunction();
 			FillDrawingList();
 			pGUI->waitForClick();
@@ -817,6 +818,7 @@ void Restaurant::SimMODE(int mode)
 		}
 		else if (mode == 2)
 		{
+			print = "";
 			assignmentfunction();
 			Sleep(1000);
 			FillDrawingList();
@@ -825,6 +827,7 @@ void Restaurant::SimMODE(int mode)
 		}
 		else if (mode == 3)
 		{
+			print = "";
 			assignmentfunction();
 			timestep++;
 		}
