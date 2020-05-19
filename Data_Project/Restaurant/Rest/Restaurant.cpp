@@ -780,7 +780,6 @@ void Restaurant::OutputFunction()
 
 void Restaurant::SimMODE(int mode)
 {
-	int tracker = 0;
 	LoadingFunction();
 	Event* current_event;
 	Order* gettingserviced;
@@ -820,9 +819,8 @@ void Restaurant::SimMODE(int mode)
 		{
 			assignmentfunction();
 			Sleep(1000);
-			timestep++;
 			FillDrawingList();
-
+			timestep++;
 
 		}
 		else if (mode == 3)
@@ -830,7 +828,6 @@ void Restaurant::SimMODE(int mode)
 			assignmentfunction();
 			timestep++;
 		}
-		tracker++;
 	}
 	OutputFunction();
 
