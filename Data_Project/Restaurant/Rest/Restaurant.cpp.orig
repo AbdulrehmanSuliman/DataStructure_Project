@@ -593,7 +593,6 @@ void Restaurant::promotion(int id, double moneyExtra)
 		OrderToPromote->SetMoney(OrderToPromote->getMoney() + moneyExtra);
 		Normal_OrdersWaiting.peekFront(firstOrder);
 		firstOrderID = firstOrder->GetID();
-		O_waiting_count_Normal--;
 	}
 	while (checkPeek->GetID() != firstOrderID && Normal_OrdersWaiting.dequeue(OrderToPromote))
 	{
@@ -603,7 +602,6 @@ void Restaurant::promotion(int id, double moneyExtra)
 			WaitingOrderVIPenqueue(OrderToPromote);
 			//VIP_OrdersWaiting.enqueue(OrderToPromote);  //,OrderToPromote->CalcPriority_VIP_order()
 			OrderToPromote->SetMoney(OrderToPromote->getMoney() + moneyExtra);
-			O_waiting_count_Normal--;
 		}
 		else
 		{
@@ -617,15 +615,9 @@ void Restaurant::promotion(int id, double moneyExtra)
 
 void Restaurant::LoadingFunction()
 {
-<<<<<<< HEAD
-	ifstream file ("TestCase_4.txt");
-	int NumOfCooksVIP,NumOfCooksNormal,NumOfCooksVegan;
-	int SpeedNormalMin,SpeedNormalMax,SpeedVeganMin,SpeedVeganMax,SpeedVIPMin,SpeedVIPMax;
-=======
 	ifstream file("TestCase_6.txt");
 	int NumOfCooksVIP, NumOfCooksNormal, NumOfCooksVegan;
 	int SpeedNormalMin, SpeedNormalMax, SpeedVeganMin, SpeedVeganMax, SpeedVIPMin, SpeedVIPMax;
->>>>>>> bdba68272505b70dbf6d4dbce6169c8866c60dc6
 	int OrderBeforeBreak;
 	int BreakNormalMin, BreakNormalMax, BreakveganMin, BreakveganMax, BreakVIPMin, BreakVIPMax;
 	double InjuryProb;
@@ -756,15 +748,15 @@ void Restaurant::OutputFunction()
 		ID_Done = peekFirstDone->GetID();
 	}
 	/////////////////////////////////////////////////////////////////
-
+<<<<<<< HEAD
 	AvgWait = (waitingTim/numF);
 	AvgServ = (servingTim/numF);
 	AutoPromotedPercent = (double(AutoPromoted_Count) / double(numF)) * 100;
-
-
-
-
-
+=======
+	AvgWait = (waitingTim / numF);
+	AvgServ = (servingTim / numF);
+	AutoPromotedPercent = (AutoPromoted_Count / numF) * 100;
+>>>>>>> 09518f0728fac2613fa0fce7ee00bfa8f05bcd07
 	ofstream OutPutFile;
 	OutPutFile.open("OutPutFile");
 	OutPutFile << "FT" << "	" << "ID" << "	" << "AT" << "	" << "WT" << "	" << "ST" << endl;
@@ -788,13 +780,15 @@ void Restaurant::OutputFunction()
 
 void Restaurant::SimMODE(int mode)
 {
+	int tracker = 0;
 	LoadingFunction();
 	Event* current_event;
 	Order* gettingserviced;
-	pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan), print, "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " + to_string(totalservVGAN));
 	while (EventsQueue.peekFront(current_event) || OrdersInServing.peekFront(gettingserviced) || VIP_OrdersWaiting.peekFront(gettingserviced) || Normal_OrdersWaiting.peekFront(gettingserviced) || Vegan_OrdersWaiting.peekFront(gettingserviced))
 	{
-		
+		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan), print, "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " + to_string(totalservVGAN));
+
+
 		while (EventsQueue.peekFront(current_event) && current_event->getEventTime() == timestep)
 		{
 			EventsQueue.dequeue(current_event);
@@ -816,42 +810,39 @@ void Restaurant::SimMODE(int mode)
 		}
 		if (mode == 1)
 		{
-			print = "";
 			assignmentfunction();
 			FillDrawingList();
-			pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan), print, "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " + to_string(totalservVGAN));
 			pGUI->waitForClick();
 			timestep++;
 
 		}
 		else if (mode == 2)
 		{
-			print = "";
 			assignmentfunction();
-			pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan), print, "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " + to_string(totalservVGAN));
-			FillDrawingList();
 			Sleep(1000);
 			timestep++;
+			FillDrawingList();
+
 
 		}
 		else if (mode == 3)
 		{
-			print = "";
 			assignmentfunction();
 			timestep++;
 		}
+		tracker++;
 	}
 	OutputFunction();
 
 
 }
-
+/*
 void  Restaurant::SilentMode()
 {
-
-
-
-
+<<<<<<< HEAD
+=======
+	int tracker = 0;
+>>>>>>> 09518f0728fac2613fa0fce7ee00bfa8f05bcd07
 	LoadingFunction();
 	Event* current_event;
 	Order* gettingserviced;
@@ -887,7 +878,7 @@ void  Restaurant::SilentMode()
 	}
 	OutputFunction();
 }
-/*
+
 void Restaurant::Interactive()
 {
 	LoadingFunction();
@@ -896,11 +887,11 @@ void Restaurant::Interactive()
 	pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of waiting VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan));
 	while (EventsQueue.peekFront(current_event) || OrdersInServing.peekFront(gettingserviced) || VIP_OrdersWaiting.peekFront(gettingserviced) || Normal_OrdersWaiting.peekFront(gettingserviced) || Vegan_OrdersWaiting.peekFront(gettingserviced))
 	{
+<<<<<<< HEAD
+=======
+		pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan) , print , "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " +to_string(totalservVGAN));
 
-
-
-
-
+>>>>>>> 09518f0728fac2613fa0fce7ee00bfa8f05bcd07
 
 		while (EventsQueue.peekFront(current_event) && current_event->getEventTime() == timestep)
 		{
@@ -980,7 +971,6 @@ void Restaurant::CancelOrder(int id)
 	}
 	if (normalord->GetID() == id)
 	{
-		O_waiting_count_Normal--;
 		delete normalord;
 		return;
 	}
@@ -996,7 +986,6 @@ void Restaurant::CancelOrder(int id)
 	{
 		return;
 	}
-	O_waiting_count_Normal--;
 	delete deleteorder;
 	Normal_OrdersWaiting.peekFront(deleteorder);
 	while (deleteorder != normalord)
@@ -1153,11 +1142,10 @@ void Restaurant::WaitingOrdersToServed()
 		{
 			Urgent_count++;
 			urgent = true;
-			
+			ServingOrder = WaitingOrderVIPdequeue();
+			ServingOrder->setStatus(SRV);
 			if (VIP_AvailableCook.peekFront(CookAvailable))
 			{
-				ServingOrder = WaitingOrderVIPdequeue();
-				ServingOrder->setStatus(SRV);
 				VIP_AvailableCook.dequeue(CookAvailable);
 				ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
 				ServingOrder->SetServTime(ServingTime);
@@ -1170,8 +1158,6 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else if (Normal_AvailableCook.peekFront(CookAvailable))
 			{
-				ServingOrder = WaitingOrderVIPdequeue();
-				ServingOrder->setStatus(SRV);
 				Normal_AvailableCook.dequeue(CookAvailable);
 				ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
 				ServingOrder->SetServTime(ServingTime);
@@ -1183,8 +1169,6 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else if (Vegan_AvailableCook.peekFront(CookAvailable))
 			{
-				ServingOrder = WaitingOrderVIPdequeue();
-				ServingOrder->setStatus(SRV);
 				Vegan_AvailableCook.dequeue(CookAvailable);
 				ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
 				ServingOrder->SetServTime(ServingTime);
@@ -1196,8 +1180,6 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else if (CooksAtBreak.peekFront(CookAvailable))
 			{
-				ServingOrder = WaitingOrderVIPdequeue();
-				ServingOrder->setStatus(SRV);
 				CooksAtBreak.dequeue(CookAvailable);
 				ServingTime = (int)ceil(((double)ServingOrder->GetSize()) / (double)CookAvailable->GetSpeed());
 				ServingOrder->SetServTime(ServingTime);
@@ -1208,8 +1190,6 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else if (CooksAtRest.peekFront(CookAvailable))
 			{
-				ServingOrder = WaitingOrderVIPdequeue();
-				ServingOrder->setStatus(SRV);
 				CooksAtRest.dequeue(CookAvailable);
 				CookAvailable->SetCookStatus(URGENT);
 				ServingTime = (int)ceil(((double)ServingOrder->GetSize()) / (double)CookAvailable->GetSpeed());
@@ -1221,7 +1201,6 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else
 			{
-				Urgent_count--;
 				urgent = false;
 			}
 		}
@@ -1234,7 +1213,6 @@ void Restaurant::WaitingOrdersToServed()
 		{
 			VIP_AvailableCook.dequeue(CookAvailable);
 			ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
-			//ServingTime=ServingOrder->GetSize() / CookAvailable->GetSpeed();
 			ServingOrder->SetServTime(ServingTime);
 			CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 			AssigningCookToOrder(ServingOrder, CookAvailable, temp);
@@ -1245,7 +1223,6 @@ void Restaurant::WaitingOrdersToServed()
 		{
 			Normal_AvailableCook.dequeue(CookAvailable);
 			ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
-			//ServingTime=ServingOrder->GetSize() / CookAvailable->GetSpeed();
 			ServingOrder->SetServTime(ServingTime);
 			CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 			AssigningCookToOrder(ServingOrder, CookAvailable, temp);
@@ -1256,7 +1233,6 @@ void Restaurant::WaitingOrdersToServed()
 		{
 			Vegan_AvailableCook.dequeue(CookAvailable);
 			ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
-			//ServingTime=ServingOrder->GetSize() / CookAvailable->GetSpeed();
 			ServingOrder->SetServTime(ServingTime);
 			CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 			AssigningCookToOrder(ServingOrder, CookAvailable, temp);
@@ -1269,7 +1245,7 @@ void Restaurant::WaitingOrdersToServed()
 		Vegan_OrdersWaiting.dequeue(ServingOrder);
 		Vegan_AvailableCook.dequeue(CookAvailable);
 		ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
-		//ServingOrder->SetServTime(ServingTime);
+		ServingOrder->SetServTime(ServingTime);
 		CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 		AssigningCookToOrder(ServingOrder, CookAvailable, temp);
 		print = print + temp;
@@ -1280,7 +1256,7 @@ void Restaurant::WaitingOrdersToServed()
 	{
 		Normal_OrdersWaiting.dequeue(ServingOrder);
 		ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
-		//ServingOrder->SetServTime(ServingTime);
+		ServingOrder->SetServTime(ServingTime);
 		CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 		O_waiting_count_Normal--;
 		if (Normal_AvailableCook.peekFront(CookAvailable))

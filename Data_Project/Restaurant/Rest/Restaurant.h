@@ -27,16 +27,21 @@ private:
 
 	///////////////////////////ADDED/////////////////////
 	int TimeBeforePromotion;   //is the time for the normal order will wait until promotion
-	int timestep;             //Added by zaki
-	int arrived_orders;       //Added by zaki
-	int finished_orders;      //Added by zaki
-	int canceled_orders;      //Added by zaki
+	int timestep;           
+	int arrived_orders;       
+	int finished_orders;      
+	int canceled_orders;     
+	int promoted_orders;
 	int VIP_MaxWaitingTime;		//Max time spent in the vip queue
 	double InjuryProbability;
 	int CookRestPeriodInjury;
 	int AutoPromoted_Count;
 	int Urgent_count;
 	int inj_C;
+	string print;
+	int totalservVIP;
+	int totalservNRM;
+	int totalservVGAN;
 
 	PriorityQueue<Order*> VIP_OrdersWaitingPriorityQueue; //priority Queue to be used in phase 2
 	Queue<Order*> VIP_OrdersWaiting;  //VIP orders in waiting must be assigned to cook if any
@@ -85,9 +90,12 @@ private:
 	Order* WaitingOrderVIPdequeue();  //Removes VIP orders from the waiting and returns removed order
 	Order* WaitingOrderVIPdequeuePriority();  
 	//void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
-	void AssigningCookToOrder(Order*,Cook*);
+	void AssigningCookToOrder(Order*,Cook*, string&);
 	void SilentMode();
+	void Interactive();
+	void StepByStep();
 	void OutputFunction();
+	void SimMODE(int);
 public:
 
 	Restaurant();

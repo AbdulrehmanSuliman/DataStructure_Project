@@ -115,7 +115,7 @@ public:
 	// Output Functions  ---------------------------
 	void PrintMessage(string msg) const; // prints a message in the status bar
 	void PrintMessage(string msg1, string msg2, string msg3);
-
+	void PrintMessage(string msg1, string msg2, string msg3, string msg4, string msg5);
 	void UpdateInterface();
 	void AddToDrawingList(Order* pOrd);	//Adds a new order to the drawing queue
 	void AddToDrawingList(Cook* pC);	//Adds a new cook to the drawing queue
