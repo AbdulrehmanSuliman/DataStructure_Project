@@ -839,7 +839,7 @@ void Restaurant::SimMODE(int mode)
 			print = "";
 			assignmentfunction();
 			pGUI->PrintMessage("Current Time Step : " + to_string(timestep), "Number of available VIP orders: " + to_string(O_waiting_count_VIP) + ",  Number of waiting Normal orders: " + to_string(O_waiting_count_Normal) + ",  Number of waiting Vegan orders: " + to_string(O_waiting_count_Vegan), "Number of available VIP cooks: " + to_string(C_Available_count_VIP) + ",  Number of available Normal cooks: " + to_string(C_Available_count_Normal) + ",  Number of available Vegan cooks: " + to_string(C_Available_count_Vegan), print, "Total number of VIP served orders: " + to_string(totalservVIP) + ", Total number of Normal served orders : " + to_string(totalservNRM) + ", Total number of Vegan served orders: " + to_string(totalservVGAN));
-			FillDrawingList();
+	FillDrawingList();
 			Sleep(1000);
 			timestep++;
 
@@ -1068,7 +1068,7 @@ void Restaurant::WaitingOrderVIPenqueue(Order* addorder)
 {
 	VIP_OrdersWaiting.enqueue(addorder);
 	VIP_OrdersWaitingPriorityQueue.enqueue(addorder, addorder->CalcPriority_VIP_order());
-	//O_waiting_count_VIP++;
+	O_waiting_count_VIP++;
 	VIPO_silent_counter++;
 }
 
@@ -1279,7 +1279,7 @@ void Restaurant::WaitingOrdersToServed()
 		Vegan_OrdersWaiting.dequeue(ServingOrder);
 		Vegan_AvailableCook.dequeue(CookAvailable);
 		ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
-		//ServingOrder->SetServTime(ServingTime);
+		ServingOrder->SetServTime(ServingTime);
 		CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 		AssigningCookToOrder(ServingOrder, CookAvailable, temp);
 		print = print + temp;
@@ -1290,7 +1290,7 @@ void Restaurant::WaitingOrdersToServed()
 	{
 		Normal_OrdersWaiting.dequeue(ServingOrder);
 		ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
-		//ServingOrder->SetServTime(ServingTime);
+		ServingOrder->SetServTime(ServingTime);
 		CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 		O_waiting_count_Normal--;
 		if (Normal_AvailableCook.peekFront(CookAvailable))
