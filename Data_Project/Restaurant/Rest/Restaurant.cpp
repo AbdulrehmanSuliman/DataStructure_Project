@@ -617,6 +617,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 
 void Restaurant::LoadingFunction()
 {
+
 	ifstream file("TestCase_6.txt");
 	int NumOfCooksVIP, NumOfCooksNormal, NumOfCooksVegan;
 	int SpeedNormalMin, SpeedNormalMax, SpeedVeganMin, SpeedVeganMax, SpeedVIPMin, SpeedVIPMax;
@@ -1317,12 +1318,8 @@ void Restaurant::MovingRestToAvailable()
 	{
 		CooksAtRest.dequeue(In_RestCook);
 		In_RestCook->SetAvailabilityTime(NULL);
-		if (In_RestCook->GetCookstatus() == INJ)
-		{
-			In_RestCook->setSpeed(In_RestCook->GetSpeed() * 2);
-			In_RestCook->SetCookStatus(SAFE);
-
-		}
+		In_RestCook->setSpeed(In_RestCook->GetSpeed() * 2);
+		In_RestCook->SetCookStatus(SAFE);
 		MoveToAvailable(In_RestCook);
 	}
 }
@@ -1353,6 +1350,7 @@ void Restaurant::CheckBusyCooks()
 		BusyCook->SetOrderAssignedTo(nullptr);
 		if (BusyCook->GetCookstatus() == INJ)
 		{
+			BusyCook->SetAvailabilityTime(CookRestPeriodInjury + timestep);
 			CooksAtRest.enqueue(BusyCook);
 		}
 		else
