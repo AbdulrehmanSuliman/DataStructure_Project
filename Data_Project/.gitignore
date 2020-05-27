@@ -1,0 +1,9 @@
+application/cache
+echo application/cache >> .gitignore
+application/cache
+echo application/cache >> .gitignore
+Data_Project/Restaurant/Debug
+Data_Project/Restaurant/Debug
+Data_Project/Restaurant.sdf
+Data_Project/Debug
+Data_Project/Debug

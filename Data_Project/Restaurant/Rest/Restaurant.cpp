@@ -618,7 +618,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 void Restaurant::LoadingFunction()
 {
 
-	ifstream file("TestCase_6.txt");
+	ifstream file("TestCase_5.txt");
 	int NumOfCooksVIP, NumOfCooksNormal, NumOfCooksVegan;
 	int SpeedNormalMin, SpeedNormalMax, SpeedVeganMin, SpeedVeganMax, SpeedVIPMin, SpeedVIPMax;
 	int OrderBeforeBreak;
@@ -724,6 +724,9 @@ void Restaurant::OutputFunction()
 	Order* doneOrders;
 	float waitingTim = 0;
 	float servingTim = 0;
+	NormO_silent_counter = 0;
+	VIPO_silent_counter = 0;
+	VegO_silent_counter = 0;
 	//////////////////////////////////////////////////////////////////
 	int ID_Done = -1;
 	Order* peekFirstDone;
@@ -768,6 +771,18 @@ void Restaurant::OutputFunction()
 	while (OrdersFinished.dequeue(doneOrders))
 	{
 		doneToOutput.enqueue(doneOrders, doneOrders->getWaitingTime() + doneOrders->GetServTime());
+		if (doneOrders->GetType() == TYPE_NRM)
+		{
+			NormO_silent_counter++;
+		}
+		else if (doneOrders->GetType() == TYPE_VIP)
+		{
+			VIPO_silent_counter++;
+		}
+		else if (doneOrders->GetType() == TYPE_VGAN)
+		{
+			VegO_silent_counter++;
+		}
 	}
 
 	while (doneToOutput.dequeue(doneOrders))
@@ -1053,7 +1068,7 @@ void Restaurant::WaitingOrderVIPenqueue(Order* addorder)
 {
 	VIP_OrdersWaiting.enqueue(addorder);
 	VIP_OrdersWaitingPriorityQueue.enqueue(addorder, addorder->CalcPriority_VIP_order());
-	O_waiting_count_VIP++;
+	//O_waiting_count_VIP++;
 	VIPO_silent_counter++;
 }
 
