@@ -617,6 +617,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 
 void Restaurant::LoadingFunction()
 {
+
 	ifstream file("TestCase_6.txt");
 	int NumOfCooksVIP, NumOfCooksNormal, NumOfCooksVegan;
 	int SpeedNormalMin, SpeedNormalMax, SpeedVeganMin, SpeedVeganMax, SpeedVIPMin, SpeedVIPMax;
@@ -974,6 +975,7 @@ void Restaurant::CancelOrder(int id)
 	}
 	if (normalord->GetID() == id)
 	{
+		O_waiting_count_Normal--;
 		delete normalord;
 		return;
 	}
@@ -989,6 +991,7 @@ void Restaurant::CancelOrder(int id)
 	{
 		return;
 	}
+	O_waiting_count_Normal--;
 	delete deleteorder;
 	Normal_OrdersWaiting.peekFront(deleteorder);
 	while (deleteorder != normalord)
@@ -1145,10 +1148,11 @@ void Restaurant::WaitingOrdersToServed()
 		{
 			Urgent_count++;
 			urgent = true;
-			ServingOrder = WaitingOrderVIPdequeue();
-			ServingOrder->setStatus(SRV);
+			
 			if (VIP_AvailableCook.peekFront(CookAvailable))
 			{
+				ServingOrder = WaitingOrderVIPdequeue();
+				ServingOrder->setStatus(SRV);
 				VIP_AvailableCook.dequeue(CookAvailable);
 				ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
 				ServingOrder->SetServTime(ServingTime);
@@ -1161,6 +1165,8 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else if (Normal_AvailableCook.peekFront(CookAvailable))
 			{
+				ServingOrder = WaitingOrderVIPdequeue();
+				ServingOrder->setStatus(SRV);
 				Normal_AvailableCook.dequeue(CookAvailable);
 				ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
 				ServingOrder->SetServTime(ServingTime);
@@ -1172,6 +1178,8 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else if (Vegan_AvailableCook.peekFront(CookAvailable))
 			{
+				ServingOrder = WaitingOrderVIPdequeue();
+				ServingOrder->setStatus(SRV);
 				Vegan_AvailableCook.dequeue(CookAvailable);
 				ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
 				ServingOrder->SetServTime(ServingTime);
@@ -1183,6 +1191,8 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else if (CooksAtBreak.peekFront(CookAvailable))
 			{
+				ServingOrder = WaitingOrderVIPdequeue();
+				ServingOrder->setStatus(SRV);
 				CooksAtBreak.dequeue(CookAvailable);
 				ServingTime = (int)ceil(((double)ServingOrder->GetSize()) / (double)CookAvailable->GetSpeed());
 				ServingOrder->SetServTime(ServingTime);
@@ -1193,6 +1203,8 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else if (CooksAtRest.peekFront(CookAvailable))
 			{
+				ServingOrder = WaitingOrderVIPdequeue();
+				ServingOrder->setStatus(SRV);
 				CooksAtRest.dequeue(CookAvailable);
 				CookAvailable->SetCookStatus(URGENT);
 				ServingTime = (int)ceil(((double)ServingOrder->GetSize()) / (double)CookAvailable->GetSpeed());
@@ -1204,6 +1216,7 @@ void Restaurant::WaitingOrdersToServed()
 			}
 			else
 			{
+				Urgent_count--;
 				urgent = false;
 			}
 		}
@@ -1216,6 +1229,7 @@ void Restaurant::WaitingOrdersToServed()
 		{
 			VIP_AvailableCook.dequeue(CookAvailable);
 			ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
+			//ServingTime=ServingOrder->GetSize() / CookAvailable->GetSpeed();
 			ServingOrder->SetServTime(ServingTime);
 			CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 			AssigningCookToOrder(ServingOrder, CookAvailable, temp);
@@ -1226,6 +1240,7 @@ void Restaurant::WaitingOrdersToServed()
 		{
 			Normal_AvailableCook.dequeue(CookAvailable);
 			ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
+			//ServingTime=ServingOrder->GetSize() / CookAvailable->GetSpeed();
 			ServingOrder->SetServTime(ServingTime);
 			CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 			AssigningCookToOrder(ServingOrder, CookAvailable, temp);
@@ -1236,6 +1251,7 @@ void Restaurant::WaitingOrdersToServed()
 		{
 			Vegan_AvailableCook.dequeue(CookAvailable);
 			ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
+			//ServingTime=ServingOrder->GetSize() / CookAvailable->GetSpeed();
 			ServingOrder->SetServTime(ServingTime);
 			CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 			AssigningCookToOrder(ServingOrder, CookAvailable, temp);
@@ -1248,7 +1264,7 @@ void Restaurant::WaitingOrdersToServed()
 		Vegan_OrdersWaiting.dequeue(ServingOrder);
 		Vegan_AvailableCook.dequeue(CookAvailable);
 		ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
-		ServingOrder->SetServTime(ServingTime);
+		//ServingOrder->SetServTime(ServingTime);
 		CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 		AssigningCookToOrder(ServingOrder, CookAvailable, temp);
 		print = print + temp;
@@ -1259,7 +1275,7 @@ void Restaurant::WaitingOrdersToServed()
 	{
 		Normal_OrdersWaiting.dequeue(ServingOrder);
 		ServingTime = (int)ceil((double)ServingOrder->GetSize() / (double)CookAvailable->GetSpeed());
-		ServingOrder->SetServTime(ServingTime);
+		//ServingOrder->SetServTime(ServingTime);
 		CookAvailable->SetAvailabilityTime(timestep + ServingTime);
 		O_waiting_count_Normal--;
 		if (Normal_AvailableCook.peekFront(CookAvailable))
@@ -1302,12 +1318,8 @@ void Restaurant::MovingRestToAvailable()
 	{
 		CooksAtRest.dequeue(In_RestCook);
 		In_RestCook->SetAvailabilityTime(NULL);
-		if (In_RestCook->GetCookstatus() == INJ)
-		{
-			In_RestCook->setSpeed(In_RestCook->GetSpeed() * 2);
-			In_RestCook->SetCookStatus(SAFE);
-
-		}
+		In_RestCook->setSpeed(In_RestCook->GetSpeed() * 2);
+		In_RestCook->SetCookStatus(SAFE);
 		MoveToAvailable(In_RestCook);
 	}
 }
@@ -1338,6 +1350,7 @@ void Restaurant::CheckBusyCooks()
 		BusyCook->SetOrderAssignedTo(nullptr);
 		if (BusyCook->GetCookstatus() == INJ)
 		{
+			BusyCook->SetAvailabilityTime(CookRestPeriodInjury + timestep);
 			CooksAtRest.enqueue(BusyCook);
 		}
 		else
