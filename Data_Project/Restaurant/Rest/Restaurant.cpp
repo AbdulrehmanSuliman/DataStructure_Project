@@ -1050,7 +1050,7 @@ void Restaurant::WaitingOrderVIPenqueue(Order* addorder)
 {
 	VIP_OrdersWaiting.enqueue(addorder);
 	VIP_OrdersWaitingPriorityQueue.enqueue(addorder, addorder->CalcPriority_VIP_order());
-	O_waiting_count_VIP++;
+	//O_waiting_count_VIP++;
 	VIPO_silent_counter++;
 }
 
