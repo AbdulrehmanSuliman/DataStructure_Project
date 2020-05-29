@@ -1310,7 +1310,7 @@ void Restaurant::WaitingOrdersToServed()
 	}
 
 }
-void Restaurant::MovingBreakToAvailable()
+void Restaurant::MovingBreakToAvailable()//Moves Cooks in breakList to Available Cooklist After finishing their break
 {
 	Cook* In_BreakCook;
 	while (CooksAtBreak.peekFront(In_BreakCook) && In_BreakCook->getAvailabilityTime() == timestep)
@@ -1326,7 +1326,7 @@ void Restaurant::MovingBreakToAvailable()
 		MoveToAvailable(In_BreakCook);
 	}
 }
-void Restaurant::MovingRestToAvailable()
+void Restaurant::MovingRestToAvailable()//Moves Cooks in RestList to Available Cooklist After finishing their Rest
 {
 	Cook* In_RestCook;
 	while (CooksAtRest.peekFront(In_RestCook) && In_RestCook->getAvailabilityTime() == timestep)
@@ -1338,7 +1338,7 @@ void Restaurant::MovingRestToAvailable()
 		MoveToAvailable(In_RestCook);
 	}
 }
-void Restaurant::CheckBusyCooks()
+void Restaurant::CheckBusyCooks()//Checks Busycook list if is it the cookbreak time Then moves it to break-list if is injured move it to rest-list if non of the previous then move it to Avilable cook 
 {
 	srand((unsigned)time(NULL));
 	Cook* BusyCook;
@@ -1392,7 +1392,7 @@ void Restaurant::assignmentfunction()
 	CheckBusyCooks();
 	WaitingOrdersToServed();
 }
-void Restaurant::SRV_to_Finshed(Order* finished)
+void Restaurant::SRV_to_Finshed(Order* finished)//Moves the order from Order in serving List TO Finished Orders List
 {
 	int ID = finished->GetID();
 	Queue<Order*> temp;
@@ -1414,7 +1414,7 @@ void Restaurant::SRV_to_Finshed(Order* finished)
 		OrdersInServing.enqueue(tempOrd);
 	}
 }
-void Restaurant::MoveToAvailable(Cook* AvailableCook)
+void Restaurant::MoveToAvailable(Cook* AvailableCook)// moves Cook to available cooks lists
 {
 	if (AvailableCook->GetType() == TYPE_VIP)
 	{

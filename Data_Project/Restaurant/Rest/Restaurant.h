@@ -77,12 +77,11 @@ private:
 	int NormC_silent_counter;
 	int VegC_silent_counter;
 
-	void MoveToAvailable(Cook* AvailableCook);
-
-	void MovingBreakToAvailable();
-	void MovingRestToAvailable();
-	void CheckBusyCooks();
-	void SRV_to_Finshed(Order*);
+	void MoveToAvailable(Cook* AvailableCook);// moves Cook to available cooks lists
+	void MovingBreakToAvailable();//Moves Cooks in breakList to Available Cooklist After finishing their break
+	void MovingRestToAvailable();//Moves Cooks in RestList to Available Cooklist After finishing their Rest
+	void CheckBusyCooks();//Checks Busycook list if is it the cookbreak time Then moves it to break-list if is injured move it to rest-list if none of the previous then move it to Avilable cook 
+	void SRV_to_Finshed(Order*);//Moves the order from Order in serving List TO Finished Orders List
 
 	//void CancelOrder(int id);
 
