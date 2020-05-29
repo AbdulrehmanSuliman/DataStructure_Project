@@ -19,19 +19,12 @@ protected:
 public:
 	Order(int ID, ORD_TYPE r_Type,int size);
 	virtual ~Order();
-
 	int GetID();
-
 	ORD_TYPE GetType() const;
-	//void SetDistance(int d);
-	//int GetDistance() const;
-
 	void setStatus(ORD_STATUS s);
 	ORD_STATUS getStatus() const;
 	
-	//
-	// TODO: Add More Member Functions As Needed
-	//
+
 	void SetMoney(double);
 	//ADDED
 	double getMoney();
@@ -40,9 +33,7 @@ public:
 	int GetSize() const;
 	void SetType(ORD_TYPE);
 	void SetWaitingTime(int);
-//<<<<<<< HEAD
 	double CalcPriority_VIP_order();//Calculate the Priority of vip Order according to Equation
-//=======
 	void setArrivalTime(int);
 	void SetServTime(int);
 	int getWaitingTime();

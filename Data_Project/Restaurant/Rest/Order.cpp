@@ -24,16 +24,6 @@ ORD_TYPE Order::GetType() const
 	return type;
 }
 
-/*
-void Order::SetDistance(int d)
-{
-	Distance = d>0?d:0;
-}
-
-int Order::GetDistance() const
-{
-	return Distance;
-}*/
 
 
 void Order::setStatus(ORD_STATUS s)
@@ -59,12 +49,10 @@ int  Order::getArrivalTime()
 {
 	return this->ArrTime;
 }
-//<<<<<<< HEAD
 double Order::CalcPriority_VIP_order()
 {
 	return (totalMoney-double(ArrTime))/double(Size);
 }
-//=======
 void Order::setArrivalTime(int time)
 {
 	ArrTime = time;
