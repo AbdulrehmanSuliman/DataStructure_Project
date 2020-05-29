@@ -15,8 +15,6 @@ ArrivalEvent::ArrivalEvent(ORD_TYPE otyp,int atime,int id,int size,double money)
 }
 void ArrivalEvent::Execute(Restaurant* pRest)
 {
-	//This function should create an order and fills its data 
-	// Then adds it to normal, vegan, or VIP order lists that you will create in phase1
 	Order* Ord = new Order(OrderID, OrdType, Size);
 	Ord->SetMoney(OrdMoney);
 	Ord->setArrivalTime(EventTime);
@@ -32,10 +30,4 @@ void ArrivalEvent::Execute(Restaurant* pRest)
 	{
 		pRest->AddtoVegan_OrdersWaitingQueue(Ord);
 	}
-
-	
-	///For the sake of demo, this function will just create an order and add it to DemoQueue
-	///Remove the next code lines in phases 1&2
-	/*Order* pOrd = new Order(OrderID,OrdType,Size);
-	pRest->AddtoDemoQueue(pOrd);*/
 }

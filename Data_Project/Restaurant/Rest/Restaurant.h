@@ -83,6 +83,7 @@ private:
 	void AssigningCookToOrder(Order*,Cook*, string&);
 	void OutputFunction();
 	void SimMODE(int);
+	void assignmentfunction();
 public:
 
 	Restaurant();
@@ -97,11 +98,7 @@ public:
 	void AddtoVegan_OrdersWaitingQueue(Order* ord); //enqueues the order in the Vegan waiting list
 	void WaitingOrderVIPenqueue(Order*);  //adds the vip order to the queues
 	void promotion(int id, double);
-
-/// ================================================================================================== 
-	
 	void LoadingFunction();
-	void assignmentfunction();
 	void CancelOrder(int id);
 };
 

@@ -427,7 +427,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 void Restaurant::LoadingFunction()
 {
 
-	ifstream file("TestCase_5.txt");
+	ifstream file("TestCase_6.txt");
 	int NumOfCooksVIP, NumOfCooksNormal, NumOfCooksVegan;
 	int SpeedNormalMin, SpeedNormalMax, SpeedVeganMin, SpeedVeganMax, SpeedVIPMin, SpeedVIPMax;
 	int OrderBeforeBreak;

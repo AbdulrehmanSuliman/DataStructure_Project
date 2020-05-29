@@ -15,7 +15,6 @@ class ArrivalEvent: public Event
 	int Size;  //Number of dishes in the order
 public:
 	ArrivalEvent(int eTime, int oID, ORD_TYPE oType);
-	//Add more constructors if needed
 	ArrivalEvent(ORD_TYPE otyp,int atime,int id,int size,double money);
 	virtual void Execute(Restaurant *pRest);	//override execute function
 
