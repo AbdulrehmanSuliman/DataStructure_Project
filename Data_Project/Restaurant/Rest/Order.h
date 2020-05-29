@@ -41,7 +41,7 @@ public:
 	void SetType(ORD_TYPE);
 	void SetWaitingTime(int);
 //<<<<<<< HEAD
-	double CalcPriority_VIP_order();
+	double CalcPriority_VIP_order();//Calculate the Priority of vip Order according to Equation
 //=======
 	void setArrivalTime(int);
 	void SetServTime(int);
