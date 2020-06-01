@@ -427,7 +427,7 @@ void Restaurant::promotion(int id, double moneyExtra)
 void Restaurant::LoadingFunction()
 {
 
-	ifstream file("TestCase_6.txt");
+	file.open("TestCase_2.txt");
 	int NumOfCooksVIP, NumOfCooksNormal, NumOfCooksVegan;
 	int SpeedNormalMin, SpeedNormalMax, SpeedVeganMin, SpeedVeganMax, SpeedVIPMin, SpeedVIPMax;
 	int OrderBeforeBreak;
@@ -436,7 +436,7 @@ void Restaurant::LoadingFunction()
 	int RestPeriodInjured;
 	int TimeBeforeProm, TimeBeforePromVIP;
 	int NumOfEvents;
-
+	
 
 	file >> NumOfCooksNormal >> NumOfCooksVegan >> NumOfCooksVIP;
 	file >> SpeedNormalMin >> SpeedNormalMax >> SpeedVeganMin >> SpeedVeganMax >> SpeedVIPMin >> SpeedVIPMax;
@@ -567,7 +567,7 @@ void Restaurant::OutputFunction()
 	AutoPromotedPercent = (double(AutoPromoted_Count) / double(numF)) * 100;
 
 	ofstream OutPutFile;
-	OutPutFile.open("OutPutFile");
+	OutPutFile.open("Out_TestCase.txt");
 	OutPutFile << "FT" << "	" << "ID" << "	" << "AT" << "	" << "WT" << "	" << "ST" << endl;
 	PriorityDESQueue<Order*> doneToOutput;
 

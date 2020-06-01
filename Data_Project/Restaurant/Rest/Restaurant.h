@@ -7,6 +7,7 @@
 #include "..\Generic_DS\Queue.h"
 #include "..\Events\Event.h"
 #include"..\Generic_DS\PriorityQueue.h"
+#include <fstream>
 
 #include "..\PriorityDESqueue.h"
 #include "Order.h"
@@ -36,7 +37,7 @@ private:
 	int totalservVIP;
 	int totalservNRM;
 	int totalservVGAN;
-
+	ifstream file;
 	PriorityQueue<Order*> VIP_OrdersWaitingPriorityQueue; 
 	Queue<Order*> VIP_OrdersWaiting;  //VIP orders in waiting must be assigned to cook if any
 	Queue<Order*> Normal_OrdersWaiting;   //Normal orders in waiting assigned to vip and normal cooks after vip is served
